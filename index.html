@@ -89,6 +89,33 @@
     font-size: 0.92rem;
     padding: 10px 12px;
   }
+  .menu-nav {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 8px;
+  }
+  .menu-nav a {
+    display: block;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--card-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: border-color .15s;
+  }
+  .menu-nav a:hover { border-color: var(--accent); }
+  .menu-nav a .sub {
+    display: block;
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 400;
+    margin-top: 2px;
+  }
 
   .filters {
     display: flex; flex-wrap: wrap; gap: 8px;
@@ -296,6 +323,11 @@
   <div class="menu-panel">
     <label class="menu-label" for="datasetSelect">Soubor témat</label>
     <select id="datasetSelect" aria-label="Vybrat soubor s tématy"></select>
+    <nav class="menu-nav">
+      <span class="menu-label">Další stránky</span>
+      <a href="prvni-vety.html">🎤 První věty ke státnicím<span class="sub">Úvodní věty a definice ke každému okruhu</span></a>
+      <a href="reels.html">🎬 Reels<span class="sub">Vertikální feed dílčích pojmů</span></a>
+    </nav>
   </div>
 </div>
 
