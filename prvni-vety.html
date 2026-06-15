@@ -36,7 +36,7 @@
 
   header { text-align: center; margin: 14px 0 18px; }
   header h1 { font-size: 1.35rem; margin: 0 0 6px; letter-spacing: -0.01em; }
-  header p { margin: 0 auto; max-width: 56ch; color: var(--muted); font-size: 0.9rem; }
+  header p { margin: 0 auto; max-width: 58ch; color: var(--muted); font-size: 0.9rem; }
 
   .search {
     width: 100%;
@@ -140,7 +140,50 @@
   }
   .math li + li { border-top: 1px solid rgba(44,53,86,.6); }
 
-  .codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .subs { margin-top: 16px; }
+  .subs-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; margin: 0 0 8px;
+  }
+  .section-label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--muted); font-weight: 700; margin: 0;
+  }
+  .subs-toggle {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    font-family: inherit; font-size: 0.72rem; padding: 4px 11px;
+    border-radius: 999px; cursor: pointer; white-space: nowrap;
+  }
+  details.sub {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-top: 6px;
+    background: var(--card-2);
+    overflow: hidden;
+  }
+  details.sub summary {
+    cursor: pointer;
+    padding: 9px 32px 9px 12px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    list-style: none;
+    position: relative;
+  }
+  details.sub summary::-webkit-details-marker { display: none; }
+  details.sub summary::after {
+    content: "+";
+    position: absolute; right: 12px; top: 8px;
+    color: var(--muted); font-size: 1.1rem; line-height: 1;
+  }
+  details.sub[open] summary::after { content: "\2212"; }
+  .sub-body {
+    margin: 0;
+    padding: 0 12px 11px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
   .code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 0.72rem;
@@ -152,27 +195,28 @@
   }
 
   .empty { text-align: center; color: var(--muted); padding: 40px 12px; }
-
   mark { background: rgba(108,140,255,.35); color: inherit; border-radius: 3px; padding: 0 2px; }
-
-  @media print {
-    body { background: #fff; color: #000; }
-    .search, .filters, .count, .nav { display: none !important; }
-    .card { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
-    .opener { background: #f3f3f3; }
-    .math { background: #fafafa; }
-  }
 
   .nav { text-align: center; margin: 2px 0 18px; }
   .nav a { color: var(--accent); text-decoration: none; font-size: 0.82rem; }
   .nav a:hover { text-decoration: underline; }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .search, .filters, .count, .nav, .subs-toggle { display: none !important; }
+    .card { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+    .opener { background: #f3f3f3; }
+    .math { background: #fafafa; }
+    details.sub { break-inside: avoid; }
+    details.sub > .sub-body { display: block !important; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <h1>🎤 První věty ke státnicím</h1>
-    <p>Úvodní věty (max. 3) ke každému okruhu — to, čím začneš odpověď před komisí. Kde to dává smysl, je přidaná i matematická definice.</p>
+    <p>Úvodní věty (max. 3) ke každému okruhu i ke každému dílčímu pojmu — to, čím začneš odpověď před komisí. Kde to dává smysl, je přidaná matematická definice.</p>
   </header>
 
   <div class="nav"><a href="index.html">← Náhodné téma (procvičování)</a></div>
@@ -186,332 +230,467 @@
 </div>
 
 <script>
-const TOPICS = [
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Lineární algebra",
-    codes: ["MB151"],
-    opener: "Lineární algebra je oblast matematiky studující vektory, vektorové prostory a lineární zobrazení mezi nimi. Jejím základním objektem je vektor jako uspořádaná n-tice čísel a matice, která zároveň reprezentuje lineární zobrazení a zápis soustavy lineárních rovnic. Centrálními úlohami jsou řešení soustav Gaussovou eliminací, výpočet determinantu a hledání vlastních čísel a vektorů — nástroje klíčové v počítačové grafice, strojovém učení i numerických metodách.",
-    math: [
-      "Lineární zobrazení: T(u+v)=T(u)+T(v), T(αv)=αT(v)",
-      "Vlastní číslo a vektor: A·v = λ·v, v ≠ 0",
-      "Determinant 2×2: det[[a,b],[c,d]] = ad − bc",
-      "Regularita: A⁻¹ existuje ⟺ det(A) ≠ 0"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Základy matematické analýzy",
-    codes: ["IB000", "MB152"],
-    opener: "Matematická analýza studuje spojité veličiny a jejich změny pomocí limitního přechodu. Jejími ústředními pojmy jsou limita, derivace (okamžitá rychlost změny, geometricky sklon tečny) a integrál (akumulace hodnot, geometricky obsah pod grafem), které navzájem propojuje Newtonova–Leibnizova věta. Je matematickým základem modelování spojitých dějů a optimalizačních metod, zejména gradientního sestupu ve strojovém učení.",
-    math: [
-      "Derivace: f′(x₀) = lim_{h→0} (f(x₀+h) − f(x₀)) / h",
-      "Newton–Leibniz: ∫ₐᵇ f(x) dx = F(b) − F(a), kde F′ = f",
-      "Spojitost v a: lim_{x→a} f(x) = f(a)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Kombinatorika a pravděpodobnost",
-    codes: ["IB000", "MB153"],
-    opener: "Kombinatorika je část diskrétní matematiky zabývající se počítáním, výběrem a uspořádáním objektů z konečných množin — permutacemi, variacemi a kombinacemi. Pravděpodobnost na ni navazuje a kvantifikuje očekávatelnost náhodných jevů číslem mezi 0 a 1; u klasické definice jako poměr příznivých výsledků ke všem stejně možným. Klíčovým nástrojem je Bayesova věta, která umožňuje obrátit podmíněnost a je základem naivního bayesovského klasifikátoru.",
-    math: [
-      "Kombinace: C(n,k) = n! / (k!·(n−k)!)",
-      "Variace: V(n,k) = n! / (n−k)!,  permutace: P(n) = n!",
-      "Podmíněná: P(A|B) = P(A∩B) / P(B)",
-      "Bayes: P(B|A) = P(A|B)·P(B) / P(A)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Popisná statistika",
-    codes: ["MB153"],
-    opener: "Popisná statistika přehledně shrnuje a popisuje pozorovaná data, aniž by z nich vyvozovala závěry o celé populaci. K tomu používá míry polohy (průměr, medián, modus), míry variability (rozptyl, směrodatná odchylka) a korelační koeficient pro vztah dvou veličin. Na ni navazuje induktivní statistika, která pomocí bodových a intervalových odhadů usuzuje z výběru na celou populaci.",
-    math: [
-      "Průměr: x̄ = (1/n)·Σ xᵢ",
-      "Rozptyl: σ² = (1/n)·Σ (xᵢ − x̄)²,  odchylka σ = √σ²",
-      "Korelace: r = Cov(X,Y) / (σₓ·σᵧ) ∈ [−1, +1]",
-      "95% interval pro průměr: x̄ ± 1,96·σ/√n"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Elementární teorie čísel",
-    codes: ["MB154"],
-    opener: "Teorie čísel studuje vlastnosti celých čísel, zejména dělitelnost, prvočísla a modulární aritmetiku. Jejím základním nástrojem je Euklidův algoritmus pro výpočet největšího společného dělitele a v rozšířené formě i modulárních inverzí. Tyto poznatky jsou základem moderní kryptografie — například šifra RSA stojí na obtížnosti rozkladu velkého čísla na prvočinitele.",
-    math: [
-      "Kongruence: a ≡ b (mod m) ⟺ m | (a − b)",
-      "Bézout: ∃ x,y ∈ ℤ: a·x + b·y = NSD(a,b)",
-      "Euler: a^φ(m) ≡ 1 (mod m) pro NSD(a,m) = 1",
-      "RSA: n = p·q,  e·d ≡ 1 (mod φ(n))"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Grafy a jejich prohledávání",
-    codes: ["IB000", "IB002"],
-    opener: "Graf je matematická struktura tvořená množinou vrcholů a množinou hran, které je spojují; modeluje vztahy mezi objekty, jako jsou sítě, závislosti či mapy. Grafy mohou být orientované i neorientované, ohodnocené a mít speciální tvary jako strom. Základními algoritmy jsou prohledávání do šířky (BFS) a do hloubky (DFS), z nichž BFS najde nejkratší cestu v neohodnoceném grafu a oba běží v lineárním čase.",
-    math: [
-      "Graf: G = (V, E),  E ⊆ V × V",
-      "Strom: souvislý graf bez cyklů, |E| = |V| − 1",
-      "Princip podání rukou: Σ deg(v) = 2·|E|",
-      "Složitost BFS/DFS: O(|V| + |E|)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Grafové algoritmy",
-    codes: ["IB000", "IB002"],
-    opener: "Grafové algoritmy řeší optimalizační úlohy nad ohodnocenými grafy, kde každá hrana nese váhu, typicky vzdálenost nebo cenu. Mezi klíčové úlohy patří hledání nejkratší cesty (Dijkstrův algoritmus pro nezáporné váhy, Bellman–Ford pro záporné) a minimální kostry (Kruskalův a Primův algoritmus). Tyto algoritmy jsou hladové nebo založené na relaxaci hran a mají široké využití v navigaci a návrhu sítí.",
-    math: [
-      "Nejkratší cesta: minimalizuje Σ vah hran na cestě",
-      "Relaxace: dist[v] = min(dist[v], dist[u] + w(u,v))",
-      "Minimální kostra: strom přes všechny vrcholy, min Σ vah, |V|−1 hran",
-      "Dijkstra s haldou: O((|V|+|E|)·log|V|)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Stromové datové struktury",
-    codes: ["IB002"],
-    opener: "Strom je hierarchická datová struktura s kořenem, vnitřními uzly a listy, kde mezi každými dvěma uzly vede jediná cesta. Vyvážené stromy — binární vyhledávací, červeno-černé a B-stromy — udržují vyhledávání, vkládání i mazání v logaritmickém čase, zatímco halda zajišťuje rychlý přístup k minimu či maximu. Volba stromové struktury je proto klíčová pro efektivitu slovníků, databázových indexů i prioritních front.",
-    math: [
-      "Vyvážený BST: hloubka O(log n)",
-      "Operace search / insert / delete: O(log n), degenerovaný O(n)",
-      "Halda: rodič ≤ potomci (min-halda), přístup k minimu O(1)",
-      "B-strom: vysoký větvící faktor → mělká hloubka (min. diskové čtení)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Návrh algoritmů",
-    codes: ["IB002", "IB015"],
-    opener: "Návrh algoritmů se zabývá systematickými metodami konstrukce efektivních algoritmů, zejména metodou rozděl a panuj, rekurzí a dynamickým programováním. Metoda rozděl a panuj rozdělí problém na menší podproblémy, vyřeší je rekurzivně a výsledky sloučí — příkladem je mergesort se složitostí O(n log n). Správnost rekurzivních algoritmů se dokazuje matematickou indukcí, jejíž struktura přesně odpovídá rekurzi.",
-    math: [
-      "Rekurence mergesortu: T(n) = 2·T(n/2) + O(n) ⟹ O(n log n)",
-      "Dolní mez řazení porovnáváním: Ω(n log n)",
-      "Indukce: báze ↔ ukončovací podmínka, krok ↔ rekurzivní volání"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Funkcionální programování",
-    codes: ["IB015"],
-    opener: "Funkcionální programování je paradigma, v němž se výpočet chápe jako vyhodnocování funkcí bez měnitelného stavu a vedlejších efektů. Stojí na referenční transparentnosti (stejný vstup dává vždy stejný výstup), funkcích vyšších řádů jako map, filter a fold a na líném vyhodnocování. Jeho teoretickým základem je lambda kalkul a výpočet probíhá redukčními kroky až do normálního tvaru.",
-    math: [
-      "β-redukce: (λx. M) N → M[x := N]",
-      "map f [x₁,…,xₙ] = [f x₁, …, f xₙ]",
-      "foldr (⊕) z [x₁,…,xₙ] = x₁ ⊕ (x₂ ⊕ ( … ⊕ z))"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Regulární jazyky",
-    codes: ["IB005"],
-    opener: "Regulární jazyky jsou nejjednodušší třídou Chomského hierarchie (typ 3) a popisují vzory rozpoznatelné konečným automatem s konečnou pamětí. Mají tři ekvivalentní reprezentace: regulární výraz, pravolineární gramatiku a konečný automat (deterministický i nedeterministický). Jsou uzavřené na sjednocení, průnik i doplněk a to, že nějaký jazyk regulární není, se dokazuje pumping lemmatem.",
-    math: [
-      "DKA: M = (Q, Σ, δ, q₀, F),  δ: Q × Σ → Q",
-      "NKA → DKA: podmnožinová konstrukce (až 2^|Q| stavů)",
-      "Příklad neregulárního jazyka: L = {aⁿbⁿ | n ≥ 0}"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Bezkontextové jazyky a jejich reprezentace",
-    codes: ["IB005"],
-    opener: "Bezkontextové jazyky tvoří typ 2 Chomského hierarchie a popisují je bezkontextové gramatiky a zásobníkové automaty, jejichž zásobník dává paměť navíc oproti konečnému automatu. Umožňují popsat vnořené struktury jako párování závorek nebo aritmetické výrazy, a jsou proto základem syntaktické analýzy programovacích jazyků. Jsou uzavřené na sjednocení, nikoli však na průnik.",
-    math: [
-      "Gramatika: G = (N, Σ, P, S),  pravidla A → α, α ∈ (N ∪ Σ)*",
-      "Zásobníkový automat rozpozná L = {aⁿbⁿ | n ≥ 0}",
-      "{aⁿbⁿcⁿ} už bezkontextový není (pumping lemma pro CFL)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Rozhodnutelnost",
-    codes: ["IB107"],
-    opener: "Teorie rozhodnutelnosti zkoumá, které problémy lze vůbec algoritmicky vyřešit. Formálním modelem výpočtu je Turingův stroj a problém je rozhodnutelný, existuje-li algoritmus, který pro každý vstup po konečném čase vydá správnou odpověď ANO/NE. Existují však principiálně neřešitelné problémy — klasickým příkladem je problém zastavení, jehož nerozhodnutelnost se dokazuje diagonalizací.",
-    math: [
-      "Rozhodnutelný: algoritmus vždy skončí se správnou odpovědí",
-      "Částečně rozhodnutelný: skončí na ANO, na NE se může zacyklit",
-      "Problém zastavení (HALT) je nerozhodnutelný (důkaz sporem/diagonalizací)"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Složitost",
-    codes: ["IB107"],
-    opener: "Teorie složitosti měří, kolik času a paměti algoritmus potřebuje v závislosti na velikosti vstupu, a klasifikuje problémy do složitostních tříd. Třída P obsahuje problémy řešitelné v polynomiálním čase, třída NP problémy s polynomiálně ověřitelným řešením; nejtěžší problémy v NP jsou NP-úplné, například SAT. Zda platí P = NP, je nejslavnějším otevřeným problémem informatiky.",
-    math: [
-      "Inkluze tříd: P ⊆ NP ⊆ PSPACE",
-      "NP-úplný = leží v NP a každý problém z NP se naň polynomiálně redukuje",
-      "Cookova–Levinova věta: SAT je NP-úplný"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Principy strojového učení",
-    codes: ["IB031"],
-    opener: "Strojové učení je obor umělé inteligence, v němž se model učí vzory přímo z dat místo explicitního naprogramování pravidel. Rozlišujeme učení s učitelem (na označených datech — klasifikace a regrese), bez učitele (hledání skryté struktury — shlukování) a posilované učení. Klíčovým problémem je zobecnění: model nesmí být přeučený, proto se jeho kvalita měří na oddělených testovacích datech.",
-    math: [
-      "Přeučení: vysoká přesnost na trénovacích, nízká na testovacích datech",
-      "Rozdělení dat: trénovací / validační / testovací (např. 80 / 0 / 20)",
-      "Entropie (rozhodovací strom): H = − Σ pᵢ·log₂ pᵢ"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Metody strojového učení",
-    codes: ["IB031"],
-    opener: "Metody strojového učení jsou konkrétní algoritmy učení modelů z dat. Patří mezi ně lineární regrese metodou nejmenších čtverců, shlukování (hierarchické a k-means) a umělé neuronové sítě. Sítě se učí gradientním sestupem, který iterativně posouvá parametry proti směru gradientu chybové funkce; díky skryté vrstvě zvládne vícevrstvá síť i lineárně neoddělitelné úlohy jako XOR.",
-    math: [
-      "Nejmenší čtverce: minimalizuj Σ (yᵢ − ŷᵢ)²",
-      "Gradientní sestup: w ← w − η·∇L(w)",
-      "Neuron: y = f(Σ wᵢxᵢ + b),  f je aktivační funkce"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Umělá inteligence",
-    codes: ["PB016"],
-    opener: "Umělá inteligence se zabývá tvorbou systémů řešících úlohy, které u člověka vyžadují inteligenci. Mezi její klasické metody patří prohledávání stavového prostoru — neinformované (BFS, DFS) i heuristické (algoritmus A*) — řešení problémů s omezujícími podmínkami a herní strategie. U dvouhráčových her s úplnou informací se používá algoritmus minimax s alfa-beta ořezáváním.",
-    math: [
-      "A*: rozvíjí stav s nejmenším f(n) = g(n) + h(n)",
-      "Přípustná heuristika: h(n) ≤ skutečná zbývající cena ⟹ A* je optimální",
-      "Minimax: MAX volí maximum, MIN minimum z hodnot potomků"
-    ]
-  },
-  {
-    cat: "Matematika a teoretická informatika",
-    title: "Matematická logika",
-    codes: ["IB000", "PB016"],
-    opener: "Matematická logika formálně studuje pravdivost, vyplývání a dokazatelnost tvrzení. Výroková logika pracuje s výroky spojenými logickými spojkami, predikátová logika přidává kvantifikátory a predikáty pro vyjadřování o objektech. Klíčové jsou pojmy splnitelnost a tautologie a vztah mezi dokazatelností (syntaxí) a pravdivostí (sémantikou), který propojují věty o korektnosti a úplnosti.",
-    math: [
-      "Tautologie: pravdivá při každém ohodnocení;  A → B ≡ ¬A ∨ B",
-      "Korektnost: dokazatelné ⟹ pravdivé",
-      "Úplnost: pravdivé ⟹ dokazatelné",
-      "Rezoluce: z {A, B} a {¬A} plyne {B}; prázdná klauzule = spor"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Strukturování a řízení běhu programu",
-    codes: ["PB006"],
-    opener: "Tento okruh se zabývá organizací kódu pomocí podprogramů, rozsahů platnosti jmen, předávání parametrů, výjimek a principů objektově orientovaného programování. OOP sdružuje data a chování do objektů a stojí na čtyřech pilířích: zapouzdření, dědičnost, polymorfismus a abstrakce. Tyto principy zvyšují znovupoužitelnost, čitelnost a udržovatelnost kódu.",
-    math: null
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Principy nízkoúrovňového programování",
-    codes: ["PB071", "PB111"],
-    opener: "Nízkoúrovňové programování se zabývá přímou prací s pamětí a ukazateli, typicky v jazyce C. Paměť programu se dělí na zásobník (lokální proměnné), haldu (dynamická alokace přes malloc/free) a statická data; ukazatel uchovává adresu a umožňuje nepřímý přístup k hodnotě. Chyby jako únik paměti, zápis mimo meze pole nebo použití uvolněné paměti vedou k pádům i bezpečnostním zranitelnostem.",
-    math: [
-      "Ukazatel: p = &x (adresa),  *p (hodnota na adrese)",
-      "Pole a aritmetika ukazatelů: a[i] ≡ *(a + i)",
-      "Každý malloc musí mít právě jeden odpovídající free"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Architektury",
-    codes: ["PB150", "PB151"],
-    opener: "Počítačová architektura popisuje uspořádání počítače od reprezentace čísel po procesor a paměti. Celá čísla se ukládají ve dvojkové soustavě a záporná v doplňkovém kódu; procesor opakuje cyklus načti–dekóduj–vykonej. Architektury se dělí na RISC (málo jednoduchých instrukcí pevné délky) a CISC (mnoho složitějších), přičemž cache zrychluje přístup k paměti díky lokalitě.",
-    math: [
-      "Doplňkový kód: −x na n bitech = 2ⁿ − x",
-      "Rozsah n-bitového celého se znaménkem: [−2ⁿ⁻¹, 2ⁿ⁻¹ − 1]",
-      "Cyklus instrukce: fetch → decode → execute"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Databáze",
-    codes: ["PB154"],
-    opener: "Databáze je organizovaná kolekce dat; nejrozšířenější je relační model, kde data tvoří tabulky (relace) složené z řádků (n-tic) a sloupců (atributů). Integritu zajišťují klíče — primární klíč jednoznačně identifikuje řádek, cizí klíč odkazuje na jinou tabulku. Návrh kvalitního schématu vede přes funkční závislosti a normální formy (1NF až BCNF), které odstraňují redundanci a aktualizační anomálie.",
-    math: [
-      "Funkční závislost: X → Y (hodnota X určuje hodnotu Y)",
-      "Hierarchie forem: BCNF ⟹ 3NF ⟹ 2NF ⟹ 1NF",
-      "Relace = podmnožina kartézského součinu domén atributů"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "SQL, transakce a zpracování dotazů",
-    codes: ["PB154"],
-    opener: "SQL je deklarativní jazyk pro práci s relačními databázemi: dotazování (SELECT), úpravy dat (INSERT, UPDATE, DELETE) i definici struktury a integritních omezení. Transakce je nedělitelná posloupnost operací splňující vlastnosti ACID — atomicitu, konzistenci, izolaci a trvanlivost. Výkon dotazů zásadně ovlivňují indexy (typicky B-stromy), které urychlují vyhledávání z lineárního na logaritmický čas.",
-    math: [
-      "ACID: Atomicity, Consistency, Isolation, Durability",
-      "Index (B-strom): vyhledání O(log n) místo O(n)",
-      "Selekce σ, projekce π, spojení ⋈ (relační algebra)"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Operační systémy",
-    codes: ["PB152"],
-    opener: "Operační systém je software spravující hardware a poskytující službu aplikacím přes systémová volání. Jeho jádro řídí procesy a vlákna (plánování CPU), virtuální paměť pomocí stránkových tabulek a izolaci pomocí uživatelského a privilegovaného režimu. Mezi klíčové problémy patří souběžnost a uváznutí (deadlock), jemuž lze zabránit jednotným pořadím získávání zámků.",
-    math: [
-      "Deadlock vzniká při současném splnění 4 podmínek:",
-      "vzájemné vyloučení · drž a čekej · nepreemptivnost · cyklické čekání",
-      "Virtuální adresa = (číslo stránky, offset) → fyzický rámec"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Souborové systémy",
-    codes: ["PB152"],
-    opener: "Souborový systém organizuje data na blokovém zařízení do souborů a adresářů a spravuje jejich metadata. Adresář mapuje jména na i-uzly, které drží metadata a odkazy na datové bloky; alokace bloků může být souvislá, zřetězená nebo indexová. Mezi důležitá témata patří fragmentace, RAID pro spolehlivost a výkon a šifrování disku pro ochranu dat v klidu.",
-    math: [
-      "Soubor velikosti s při bloku b zabere ⌈s / b⌉ bloků",
-      "Vnitřní fragmentace = nevyužité místo v posledním bloku",
-      "RAID 1 zrcadlí (přežije 1 výpadek), RAID 5: kapacita N−1 disků"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Sítě",
-    codes: ["PB156"],
-    opener: "Počítačové sítě umožňují komunikaci mezi zařízeními a jsou organizovány do vrstev — referenční model ISO/OSI má 7 vrstev, praktický model TCP/IP čtyři. Každá vrstva poskytuje službu vyšší vrstvě a přidává vlastní hlavičku (zapouzdření); adresace probíhá na různých úrovních (MAC, IP, port). Transportní vrstva nabízí spolehlivé TCP s třícestným handshakem, nebo rychlé nespolehlivé UDP.",
-    math: [
-      "Zapouzdření: aplikace → segment (TCP) → paket (IP) → rámec (linka)",
-      "TCP handshake: SYN → SYN-ACK → ACK",
-      "Adresy: MAC (linková) · IP (síťová) · port (transportní)"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Síťové aplikace a bezpečnost",
-    codes: ["PB156"],
-    opener: "Tento okruh pokrývá aplikační protokoly (HTTP, SMTP/IMAP, FTP, DNS), kvalitu služby (QoS) a zabezpečení komunikace. DNS překládá doménová jména na IP adresy a HTTPS zajišťuje důvěrnost, integritu i autentizaci serveru pomocí TLS a certifikátů. Zabezpečení lze řešit na různých vrstvách — TLS na transportní (HTTPS), IPsec na síťové (VPN).",
-    math: [
-      "HTTP/HTTPS port 80 / 443 · DNS 53 · SMTP 25 · IMAP 143/993",
-      "QoS parametry: propustnost · zpoždění · jitter · ztrátovost",
-      "HTTPS = HTTP nad TLS (důvěrnost + integrita + autentizace serveru)"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Základy informační bezpečnosti",
-    codes: ["PV080"],
-    opener: "Informační bezpečnost chrání aktiva z hlediska tří základních vlastností — důvěrnosti, integrity a dostupnosti (triáda CIA), často doplněných o nepopiratelnost. Opírá se o kryptografická primitiva: symetrické šifry (AES), asymetrické šifry (RSA), hašovací funkce (SHA-256) a digitální podpisy. Praktická bezpečnost stojí na řízení rizik, auditu a standardizovaném hodnocení.",
-    math: [
-      "Triáda CIA: důvěrnost · integrita · dostupnost",
-      "Symetrická šifra: jeden sdílený klíč; asymetrická: pár (veřejný, soukromý)",
-      "Riziko ≈ pravděpodobnost × dopad"
-    ]
-  },
-  {
-    cat: "Programové, výpočetní a informační systémy",
-    title: "Informační bezpečnost",
-    codes: ["PV080"],
-    opener: "Tento okruh se zaměřuje na praktickou ochranu systémů: řízení identity a přístupu, ochranu soukromí, obranu před síťovými útoky a bezpečný vývoj softwaru. Klíčovými principy jsou vícefaktorová autentizace, princip nejmenších oprávnění a minimalizace dat. Typické zranitelnosti jako SQL injection se řeší u příčiny — například parametrizovanými dotazy, nikoli pouhým filtrováním vstupu.",
-    math: [
-      "Autentizace (kdo jsi) vs. autorizace (co smíš)",
-      "MFA = kombinace ≥ 2 faktorů (znalost · vlastnictví · biometrie)",
-      "Princip nejmenších oprávnění: přiděl jen nezbytné minimum práv"
-    ]
-  }
-];
+const TOPICS = [];
+TOPICS.push(
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Lineární algebra",
+  codes: ["MB151"],
+  opener: "Lineární algebra je oblast matematiky studující vektory, vektorové prostory a lineární zobrazení mezi nimi. Jejím základním objektem je vektor jako uspořádaná n-tice čísel a matice, která zároveň reprezentuje lineární zobrazení a zápis soustavy lineárních rovnic. Centrálními úlohami jsou řešení soustav Gaussovou eliminací, výpočet determinantu a hledání vlastních čísel a vektorů — nástroje klíčové v počítačové grafice, strojovém učení i numerických metodách.",
+  math: ["Lineární zobrazení: T(u+v)=T(u)+T(v), T(αv)=αT(v)","Vlastní číslo a vektor: A·v = λ·v, v ≠ 0","Determinant 2×2: det[[a,b],[c,d]] = ad − bc","Regularita: A⁻¹ existuje ⟺ det(A) ≠ 0"],
+  subs: [
+    { t: "Operace s vektory a maticemi", s: "Vektory sčítáme po složkách a násobíme skalárem, matice navíc násobíme mezi sebou, což odpovídá skládání lineárních zobrazení. Součin A·B typu (m×n)·(n×p) má rozměr m×p a není komutativní – obecně A·B ≠ B·A. Transpozice prohazuje řádky a sloupce a platí (A·B)ᵀ = Bᵀ·Aᵀ." },
+    { t: "Vlastnosti lineárních operací a skalární součin", s: "Operace vektorového prostoru splňují osm axiomů (asociativita, komutativita sčítání, distributivita). Skalární součin u·v = Σ uᵢvᵢ přiřazuje dvojici vektorů číslo, určuje délku |u|=√(u·u) i úhel a nulový součin znamená kolmost. Ve 3D existuje navíc vektorový součin u×v, který je kolmý na oba činitele a jehož velikost je obsah rovnoběžníku." },
+    { t: "Gaussova eliminace", s: "Gaussova eliminace řeší soustavy lineárních rovnic převodem rozšířené matice elementárními řádkovými úpravami na schodovitý tvar, z něhož se zpětnou substitucí dopočítá řešení. Hodnost matice určuje počet řešení: shoduje-li se hodnost matice soustavy i rozšířené matice s počtem neznámých, je řešení jediné. Složitost algoritmu je O(n³)." },
+    { t: "Determinant", s: "Determinant je číslo přiřazené čtvercové matici, které udává, kolikrát transformace změní objem, a jehož znaménko vyjadřuje změnu orientace. Matice je regulární právě tehdy, když je determinant nenulový. Pro 2×2 platí det = ad − bc, pro větší se počítá Laplaceovým rozvojem nebo Gaussovou eliminací jako součin pivotů." },
+    { t: "Vlastní čísla a vektory a jejich geometrický význam", s: "Vlastní vektor je nenulový vektor, jehož směr se transformací nemění, jen se škáluje: platí A·v = λ·v, kde λ je vlastní číslo. Vlastní čísla se hledají z charakteristické rovnice det(A − λI) = 0. Geometricky určují přirozené osy transformace a jsou základem metody PCA." },
+    { t: "Inverzní matice", s: "Inverzní matice A⁻¹ splňuje A·A⁻¹ = A⁻¹·A = I a existuje jen pro regulární matice (det ≠ 0). Geometricky reprezentuje opačnou transformaci. Soustavu A·x = b lze formálně řešit jako x = A⁻¹·b, v praxi je však Gaussova eliminace stabilnější než explicitní výpočet inverze." },
+    { t: "Vektorové podprostory", s: "Vektorový podprostor je podmnožina uzavřená na sčítání a násobení skalárem, a proto nutně obsahuje nulový vektor – například přímka či rovina procházející počátkem. Klíčové podprostory matice jsou jádro (řešení A·x = 0) a obraz. Podle věty o dimenzích je součet dimenze jádra a obrazu roven počtu sloupců." },
+    { t: "Vektorové báze", s: "Báze je lineárně nezávislá množina vektorů, která generuje celý prostor, takže každý vektor je jejich jednoznačnou lineární kombinací. Počet vektorů báze je vždy stejný a nazývá se dimenze. Ortogonální báze usnadňují výpočet souřadnic a získá se Gram–Schmidtovým procesem." },
+    { t: "Lineární transformace", s: "Lineární transformace zachovává součet a násobení skalárem: T(u+v)=T(u)+T(v) a T(αv)=αT(v); příkladem je rotace či škálování, posunutí však lineární není. Po volbě báze ji jednoznačně popisuje matice, T(v)=A·v, a skládání transformací odpovídá násobení matic. Jádro určuje, zda je transformace prostá, hodnost udává dimenzi obrazu." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Základy matematické analýzy",
+  codes: ["IB000", "MB152"],
+  opener: "Matematická analýza studuje spojité veličiny a jejich změny pomocí limitního přechodu. Jejími ústředními pojmy jsou limita, derivace (okamžitá rychlost změny, geometricky sklon tečny) a integrál (akumulace hodnot, geometricky obsah pod grafem), které navzájem propojuje Newtonova–Leibnizova věta. Je matematickým základem modelování spojitých dějů a optimalizačních metod, zejména gradientního sestupu ve strojovém učení.",
+  math: ["Derivace: f′(x₀) = lim_{h→0} (f(x₀+h) − f(x₀)) / h","Newton–Leibniz: ∫ₐᵇ f(x) dx = F(b) − F(a), kde F′ = f","Spojitost v a: lim_{x→a} f(x) = f(a)"],
+  subs: [
+    { t: "Relace a zobrazení", s: "Relace je podmnožina kartézského součinu A×B, tedy množina uspořádaných dvojic; zobrazení je speciální relace, kde každému vstupu přísluší právě jeden výstup. Zobrazení může být injektivní (prosté), surjektivní (na) nebo bijektivní; bijekce má inverzi. Skládání zobrazení je asociativní, ale obecně nekomutativní." },
+    { t: "Vlastnosti reálných funkcí", s: "Reálná funkce přiřazuje každému x z definičního oboru právě jednu hodnotu f(x). Sledujeme u ní definiční obor, obor hodnot, monotonii, omezenost, sudost či lichost, periodicitu a extrémy. Tyto vlastnosti popisují tvar grafu bez jeho kreslení a jsou základem vyšetřování průběhu funkce." },
+    { t: "Polynomy", s: "Polynom stupně n je funkce p(x)=aₙxⁿ+…+a₀, definovaná na celém ℝ a nekonečně hladká. Podle základní věty algebry má v ℂ právě n kořenů s násobností a jeho chování v nekonečnu určuje vedoucí člen. Taylorův polynom pojem zobecňuje jako nejlepší polynomická aproximace hladké funkce v okolí bodu." },
+    { t: "Spojité funkce a limity", s: "Limita popisuje hodnotu, k níž se funkce blíží, blíží-li se argument k danému bodu (ε-δ definice). Funkce je v bodě spojitá, existuje-li limita a rovná se funkční hodnotě. Na spojité funkce na uzavřeném intervalu platí Weierstrassova věta a Bolzanova věta o mezihodnotách, základ numerického hledání kořenů." },
+    { t: "Derivace", s: "Derivace f′(x₀) je limita podílu přírůstků a vyjadřuje sklon tečny, tedy okamžitou rychlost změny. Počítá se podle pravidel pro součet, součin, podíl a složenou funkci (řetězové pravidlo). Z první derivace určujeme monotonii a extrémy, z druhé konvexitu a inflexní body; gradient ji zobecňuje na více proměnných." },
+    { t: "Neurčitý a určitý integrál", s: "Neurčitý integrál hledá primitivní funkci F s F′=f, výsledkem je třída funkcí lišících se o konstantu. Hlavními metodami jsou substituce a integrace per partes. Určitý integrál je číslo rovné obsahu pod grafem a Newtonova–Leibnizova věta jej spojuje s primitivní funkcí: ∫ₐᵇ f = F(b)−F(a)." },
+    { t: "Geometrický význam", s: "Derivace f′(a) je směrnice tečny v bodě (a, f(a)); je-li nulová, jde o kandidáta na extrém. Druhá derivace popisuje konvexitu (f″>0) či konkávnost (f″<0) a její změna znaménka značí inflexní bod. Určitý integrál geometricky odpovídá obsahu plochy pod grafem, případně mezi dvěma křivkami." },
+    { t: "Diferenciální počet", s: "Diferenciální počet zkoumá derivace a jejich aplikace, zejména lokální chování funkcí – monotonii, extrémy a konvexitu. Taylorův polynom aproximuje hladkou funkci polynomem a optimalizace je základem strojového učení. Diferenciální rovnice obsahující derivace modelují přírodní děje; u rovnic prvního řádu řešíme typy se separovanými proměnnými a lineární rovnice." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Kombinatorika a pravděpodobnost",
+  codes: ["IB000", "MB153"],
+  opener: "Kombinatorika je část diskrétní matematiky zabývající se počítáním, výběrem a uspořádáním objektů z konečných množin — permutacemi, variacemi a kombinacemi. Pravděpodobnost na ni navazuje a kvantifikuje očekávatelnost náhodných jevů číslem mezi 0 a 1; u klasické definice jako poměr příznivých výsledků ke všem stejně možným. Klíčovým nástrojem je Bayesova věta, která umožňuje obrátit podmíněnost a je základem naivního bayesovského klasifikátoru.",
+  math: ["Kombinace: C(n,k) = n! / (k!·(n−k)!)","Variace: V(n,k) = n! / (n−k)!,  permutace: P(n) = n!","Podmíněná: P(A|B) = P(A∩B) / P(B)","Bayes: P(B|A) = P(A|B)·P(B) / P(A)"],
+  subs: [
+    { t: "Elementární kombinatorika (kombinace, permutace, variace)", s: "Tři základní typy výběru se liší tím, zda záleží na pořadí a zda se prvky mohou opakovat. Permutace je uspořádání všech prvků (n!), variace uspořádaný výběr části (n!/(n−k)!) a kombinace neuspořádaný výběr (C(n,k)). Při řešení nejprve určíme typ výběru a teprve pak dosadíme do vzorce." },
+    { t: "Řešení jednoduchých kombinatorických úloh", s: "Klíčem je identifikovat typ výběru a zvolit správné pravidlo. Pravidlo součinu násobí počty nezávislých po sobě jdoucích kroků, pravidlo součtu sčítá vzájemně se vylučující možnosti. Pro překrývající se skupiny slouží princip inkluze a exkluze: |A∪B| = |A|+|B|−|A∩B|." },
+    { t: "Pravděpodobnost", s: "Pravděpodobnostní prostor je trojice (Ω, 𝒜, P) a funkce P přiřazuje každému jevu číslo z [0,1] podle Kolmogorovových axiomů. U klasické (Laplaceovy) definice je pravděpodobnost poměr počtu příznivých výsledků ke všem stejně možným. Odtud plyne například P(Ā)=1−P(A) a P(∅)=0." },
+    { t: "Podmíněná pravděpodobnost (Bayesova věta)", s: "Podmíněná pravděpodobnost P(A|B)=P(A∩B)/P(B) udává pravděpodobnost jevu A za předpokladu, že nastal B. Bayesova věta umožňuje obrátit podmíněnost a aktualizovat pravděpodobnost hypotézy podle pozorovaného důkazu. Jevy jsou nezávislé, platí-li P(A∩B)=P(A)·P(B); to je základ naivního bayesovského klasifikátoru." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Popisná statistika",
+  codes: ["MB153"],
+  opener: "Popisná statistika přehledně shrnuje a popisuje pozorovaná data, aniž by z nich vyvozovala závěry o celé populaci. K tomu používá míry polohy (průměr, medián, modus), míry variability (rozptyl, směrodatná odchylka) a korelační koeficient pro vztah dvou veličin. Na ni navazuje induktivní statistika, která pomocí bodových a intervalových odhadů usuzuje z výběru na celou populaci.",
+  math: ["Průměr: x̄ = (1/n)·Σ xᵢ","Rozptyl: σ² = (1/n)·Σ (xᵢ − x̄)²,  odchylka σ = √σ²","Korelace: r = Cov(X,Y) / (σₓ·σᵧ) ∈ [−1, +1]","95% interval pro průměr: x̄ ± 1,96·σ/√n"],
+  subs: [
+    { t: "Popisná statistika", s: "Popisná statistika shrnuje data tabulkami, grafy a číselnými charakteristikami, aniž by zobecňovala na populaci; to dělá až induktivní statistika. Typ znaku (nominální, ordinální, intervalový, poměrový) určuje, které charakteristiky mají smysl. Základní grafy jsou histogram, krabicový diagram a bodový diagram." },
+    { t: "Střední hodnota", s: "Aritmetický průměr je nejrozšířenější míra polohy, ale je citlivý na odlehlé hodnoty. U náhodné veličiny mu odpovídá střední hodnota E[X] = Σ x·P(X=x), vážený průměr hodnot podle pravděpodobností. Střední hodnota je lineární: E[aX+bY]=aE[X]+bE[Y]." },
+    { t: "Medián", s: "Medián dělí seřazená data na dvě stejné poloviny a je robustní vůči odlehlým hodnotám, proto se jím udává typická mzda. U lichého počtu je to prostřední hodnota, u sudého průměr dvou prostředních. Spolu s kvartily tvoří krabicový diagram a mezikvartilové rozpětí IQR = Q₃−Q₁." },
+    { t: "Rozptyl", s: "Rozptyl měří průměrnou kvadratickou odchylku hodnot od průměru; výběrový nestranný rozptyl dělí (n−1) kvůli Besselově korekci. Směrodatná odchylka je jeho odmocnina a je ve stejných jednotkách jako data. Rozptyl je citlivý na odlehlé hodnoty, robustní alternativou je IQR nebo MAD." },
+    { t: "Korelace", s: "Pearsonův korelační koeficient r ∈ [−1,1] vyjadřuje míru a směr lineárního vztahu dvou veličin. Hodnoty ±1 značí dokonalou lineární závislost, 0 žádný lineární vztah. Klíčová poučka zní, že korelace neznamená kauzalitu – zdánlivou korelaci může způsobit společná příčina." },
+    { t: "Odhady statistik a jejich spolehlivost", s: "Bodový odhad přiřadí parametru jedinou hodnotu z výběru, intervalový (konfidenční) interval udává rozsah s danou spolehlivostí, typicky 95 %. Šířka intervalu klesá s odmocninou z n – čtyřnásobek dat zúží interval na polovinu. Základem je centrální limitní věta, podle níž má výběrový průměr přibližně normální rozdělení." },
+    { t: "Distribuční funkce", s: "Distribuční funkce F(x)=P(X≤x) je neklesající, zprava spojitá a roste od 0 do 1. U diskrétní veličiny je schodovitá, u spojité je její derivací hustota pravděpodobnosti. Platí P(a<X≤b)=F(b)−F(a) a inverzí F získáme kvantily, například medián jako F⁻¹(0,5)." },
+    { t: "Rozdělení náhodných veličin a jejich příklady", s: "Mezi diskrétní rozdělení patří binomické (počet úspěchů v n pokusech) a Poissonovo (počet vzácných jevů), mezi spojitá rovnoměrné, exponenciální a normální. Normální (Gaussovo) rozdělení je plně určeno střední hodnotou a rozptylem. Podle centrální limitní věty má součet mnoha nezávislých veličin přibližně normální rozdělení." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Elementární teorie čísel",
+  codes: ["MB154"],
+  opener: "Teorie čísel studuje vlastnosti celých čísel, zejména dělitelnost, prvočísla a modulární aritmetiku. Jejím základním nástrojem je Euklidův algoritmus pro výpočet největšího společného dělitele a v rozšířené formě i modulárních inverzí. Tyto poznatky jsou základem moderní kryptografie — například šifra RSA stojí na obtížnosti rozkladu velkého čísla na prvočinitele.",
+  math: ["Kongruence: a ≡ b (mod m) ⟺ m | (a − b)","Bézout: ∃ x,y ∈ ℤ: a·x + b·y = NSD(a,b)","Euler: a^φ(m) ≡ 1 (mod m) pro NSD(a,m) = 1","RSA: n = p·q,  e·d ≡ 1 (mod φ(n))"],
+  subs: [
+    { t: "Dělitelnost", s: "Číslo a dělí b, existuje-li celé k s b=a·k; podle základní věty aritmetiky lze každé n>1 jednoznačně rozložit na součin prvočísel. Největší společný dělitel a nejmenší společný násobek splňují NSD(a,b)·NSN(a,b)=a·b. Bézoutova věta říká, že NSD lze vyjádřit jako lineární kombinaci ax+by." },
+    { t: "Euklidův algoritmus", s: "Euklidův algoritmus počítá NSD opakovaným nahrazením NSD(a,b)=NSD(b, a mod b), dokud zbytek není nula. Pracuje v logaritmickém čase O(log min(a,b)). Rozšířená verze navíc najde Bézoutovy koeficienty, čímž umožní výpočet modulární inverze – základ RSA." },
+    { t: "Modulární operace", s: "Modulární aritmetika počítá se zbytky po dělení modulem m; sčítání, odčítání i násobení lze provádět průběžně modulo m. Dělení odpovídá násobení modulární inverzí, která existuje právě když NSD(a,m)=1, a z Eulerovy věty plyne a^φ(m)≡1 (mod m). Čínská věta o zbytcích řeší soustavy kongruencí s nesoudělnými moduly." },
+    { t: "Prvočíselnost a její testování", s: "Prvočíslo je číslo větší než 1 dělitelné jen 1 a sebou samým; prvočíselnost lze ověřit zkusmým dělením do √n. Pro velká kryptografická čísla se používají pravděpodobnostní testy, zejména Miller–Rabinův. Prvočísel je nekonečně mnoho a prvočíselná věta říká, že prvočísel do n je přibližně n/ln n." },
+    { t: "Aplikace teorie čísel (RSA, DSA, kódy)", s: "RSA volí prvočísla p, q, modul n=p·q a klíče tak, že e·d≡1 (mod φ(n)); jeho bezpečnost stojí na obtížnosti faktorizace. DSA a ECDSA stojí na obtížnosti diskrétního logaritmu. Lineární a cyklické (CRC) kódy využívají algebru zbytků k detekci a opravě chyb při přenosu." }
+  ]
+});
+TOPICS.push(
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Grafy a jejich prohledávání",
+  codes: ["IB000", "IB002"],
+  opener: "Graf je matematická struktura tvořená množinou vrcholů a množinou hran, které je spojují; modeluje vztahy mezi objekty, jako jsou sítě, závislosti či mapy. Grafy mohou být orientované i neorientované, ohodnocené a mít speciální tvary jako strom. Základními algoritmy jsou prohledávání do šířky (BFS) a do hloubky (DFS), z nichž BFS najde nejkratší cestu v neohodnoceném grafu a oba běží v lineárním čase.",
+  math: ["Graf: G = (V, E),  E ⊆ V × V","Strom: souvislý graf bez cyklů, |E| = |V| − 1","Princip podání rukou: Σ deg(v) = 2·|E|","Složitost BFS/DFS: O(|V| + |E|)"],
+  subs: [
+    { t: "Typy grafů", s: "Graf tvoří množina vrcholů a hran; neorientovaný má neuspořádané dvojice, orientovaný uspořádané a ohodnocený přiřazuje hranám váhy. Speciálními typy jsou úplný graf, bipartitní graf, DAG, strom a planární graf. Pohyb v grafu popisují pojmy sled, tah a cesta." },
+    { t: "Stromy", s: "Strom je souvislý acyklický graf, v němž mezi každými dvěma vrcholy vede právě jedna cesta a který má přesně n−1 hran. Přidání libovolné hrany vytvoří cyklus, odebrání hrany ho rozpojí. Kostra grafu je podgraf, který je stromem přes všechny vrcholy." },
+    { t: "Stupně vrcholů", s: "Stupeň vrcholu je počet hran z něj vedoucích; podle principu podání rukou je součet stupňů roven dvojnásobku počtu hran, takže vrcholů lichého stupně je sudý počet. U orientovaného grafu rozlišujeme vstupní a výstupní stupeň. Zdroj má nulový vstupní stupeň, propad nulový výstupní." },
+    { t: "Orientované grafy", s: "V orientovaném grafu má každá hrana určený směr a modeluje asymetrické vztahy, například závislosti úloh. Orientovaný cyklus znamená cyklickou závislost. Silná komponenta je maximální množina vzájemně dosažitelných vrcholů; najde ji Tarjanův nebo Kosarajův algoritmus v O(V+E)." },
+    { t: "Reprezentace grafů", s: "Matice sousednosti odpovídá na dotaz o existenci hrany v O(1), ale zabírá O(V²) paměti – vhodná pro husté grafy. Seznamy sousedů ukládají jen skutečné hrany s pamětí O(V+E) a jsou ideální pro řídké grafy. Volba reprezentace zásadně ovlivňuje složitost grafových algoritmů." },
+    { t: "Algoritmy prohledávání do hloubky a do šířky a jejich využití", s: "Prohledávání do šířky (BFS) postupuje po vrstvách pomocí fronty a v neohodnoceném grafu najde nejkratší cestu. Prohledávání do hloubky (DFS) jde co nejhlouběji pomocí zásobníku či rekurze a slouží k detekci cyklů, topologickému řazení a hledání komponent. Obě běží v lineárním čase O(V+E)." },
+    { t: "Komponenty souvislosti", s: "Komponenta souvislosti je maximální množina vzájemně dosažitelných vrcholů; graf je souvislý, má-li jedinou komponentu. Komponenty najdeme opakovaným spuštěním DFS nebo BFS z nenavštívených vrcholů v O(V+E). U orientovaných grafů rozlišujeme slabé a silné komponenty." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Grafové algoritmy",
+  codes: ["IB000", "IB002"],
+  opener: "Grafové algoritmy řeší optimalizační úlohy nad ohodnocenými grafy, kde každá hrana nese váhu, typicky vzdálenost nebo cenu. Mezi klíčové úlohy patří hledání nejkratší cesty (Dijkstrův algoritmus pro nezáporné váhy, Bellman–Ford pro záporné) a minimální kostry (Kruskalův a Primův algoritmus). Tyto algoritmy jsou hladové nebo založené na relaxaci hran a mají široké využití v navigaci a návrhu sítí.",
+  math: ["Nejkratší cesta: minimalizuje Σ vah hran na cestě","Relaxace: dist[v] = min(dist[v], dist[u] + w(u,v))","Minimální kostra: strom přes všechny vrcholy, min Σ vah, |V|−1 hran","Dijkstra s haldou: O((|V|+|E|)·log|V|)"],
+  subs: [
+    { t: "Ohodnocené grafy", s: "Ohodnocený graf přiřazuje hranám číselnou váhu vyjadřující vzdálenost, cenu nebo kapacitu. Mění charakter úloh – nestačí zjistit, zda cesta existuje, ale hledá se cesta s optimálním součtem vah. Záporný cyklus způsobí, že nejkratší cesta není definovaná." },
+    { t: "Definice nejkratší cesty", s: "Délka cesty je součet vah jejích hran a nejkratší cesta je ta s minimální délkou. Úloha má varianty z jednoho zdroje, mezi dvojicí a mezi všemi dvojicemi. Bez záporných cyklů je nejkratší cesta vždy jednoduchá; v neohodnoceném grafu ji najde BFS." },
+    { t: "Minimální kostry grafu", s: "Minimální kostra je kostra (strom přes všechny vrcholy, n−1 hran) s nejmenším součtem vah. Hlavní algoritmy ji budují hladově a opírají se o řezové lemma: nejlehčí hrana přes každý řez patří do kostry. Typickou aplikací je nejlevnější propojení sítě." },
+    { t: "Algoritmy pro hledání nejkratších cest (Dijkstra, Bellman–Ford)", s: "Oba algoritmy stojí na relaxaci hran d[v]=min(d[v], d[u]+w). Dijkstrův algoritmus s prioritní frontou vybírá nejbližší vrchol a funguje jen pro nezáporné váhy, v čase O((V+E)·log V). Bellman–Ford zvládá i záporné váhy v O(V·E) a detekuje záporný cyklus." },
+    { t: "Algoritmy pro hledání minimálních koster", s: "Kruskalův algoritmus třídí hrany podle váhy a přidává ty, které nevytvoří cyklus (hlídá union-find). Primův algoritmus nechává kostru růst z jednoho vrcholu a přidává nejlevnější výstupní hranu. Oba jsou hladové a díky řezovému lemmatu zaručeně dají minimální kostru." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Stromové datové struktury",
+  codes: ["IB002"],
+  opener: "Strom je hierarchická datová struktura s kořenem, vnitřními uzly a listy, kde mezi každými dvěma uzly vede jediná cesta. Vyvážené stromy — binární vyhledávací, červeno-černé a B-stromy — udržují vyhledávání, vkládání i mazání v logaritmickém čase, zatímco halda zajišťuje rychlý přístup k minimu či maximu. Volba stromové struktury je proto klíčová pro efektivitu slovníků, databázových indexů i prioritních front.",
+  math: ["Vyvážený BST: hloubka O(log n)","Operace search / insert / delete: O(log n), degenerovaný O(n)","Halda: rodič ≤ potomci (min-halda), přístup k minimu O(1)","B-strom: vysoký větvící faktor → mělká hloubka (min. diskové čtení)"],
+  subs: [
+    { t: "Binární vyhledávací stromy", s: "V binárním vyhledávacím stromu jsou v levém podstromu menší a v pravém větší klíče než v uzlu, což umožňuje vyhledávání v O(h). Vkládání i mazání zachovává toto uspořádání a in-order průchod vypíše klíče vzestupně. Nevyvážený strom může degenerovat na seznam s operacemi O(n)." },
+    { t: "B-stromy", s: "B-strom je vyvážený vícecestný strom, jehož uzly mají mnoho klíčů a potomků a všechny listy stejnou hloubku. Jeden uzel odpovídá diskovému bloku, takže se minimalizuje počet pomalých I/O operací. Varianta B+ strom drží data v propojených listech a je standardem databázových indexů." },
+    { t: "Červeno-černé stromy", s: "Červeno-černý strom je samovyvažující binární vyhledávací strom s uzly obarvenými červeně a černě podle pěti invariantů. Z nich plyne, že výška je nejvýše 2·log₂(n+1), takže všechny operace běží v O(log n). Vyvažuje se rotacemi a přebarvováním; používá ho std::map i Java TreeMap." },
+    { t: "Haldy", s: "Binární halda je úplný strom splňující haldovou vlastnost (rodič ≤ potomci v min-haldě), takže minimum je v kořeni dostupné v O(1). Efektivně se ukládá v poli a operace insert i extract běží v O(log n). Je základem prioritní fronty a heapsortu." },
+    { t: "Související operace a jejich složitost", s: "Ve vyváženém stromu (AVL, červeno-černý) běží vyhledání, vložení i mazání v O(log n), v degenerovaném BST až O(n). Halda dává minimum v O(1) a jeho odebrání v O(log n), B-strom minimalizuje diskové přístupy. Volba struktury závisí na profilu operací." },
+    { t: "Typické implementace a příklady použití", s: "Červeno-černé stromy implementují seřazené množiny a slovníky (std::map, TreeMap), B-stromy databázové indexy a souborové systémy. Haldy realizují prioritní fronty v Dijkstrově algoritmu i plánovači procesů. Pro vyhledávání řetězců slouží trie, pro rychlý průměrný přístup hash mapa." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Návrh algoritmů",
+  codes: ["IB002", "IB015"],
+  opener: "Návrh algoritmů se zabývá systematickými metodami konstrukce efektivních algoritmů, zejména metodou rozděl a panuj, rekurzí a dynamickým programováním. Metoda rozděl a panuj rozdělí problém na menší podproblémy, vyřeší je rekurzivně a výsledky sloučí — příkladem je mergesort se složitostí O(n log n). Správnost rekurzivních algoritmů se dokazuje matematickou indukcí, jejíž struktura přesně odpovídá rekurzi.",
+  math: ["Rekurence mergesortu: T(n) = 2·T(n/2) + O(n) ⟹ O(n log n)","Dolní mez řazení porovnáváním: Ω(n log n)","Indukce: báze ↔ ukončovací podmínka, krok ↔ rekurzivní volání"],
+  subs: [
+    { t: "Metoda rozděl a panuj", s: "Rozděl a panuj má tři kroky: rozdělení problému na menší podproblémy, jejich rekurzivní vyřešení a sloučení výsledků. Rekurenci T(n)=a·T(n/b)+f(n) analyzuje Masterova věta. Příkladem je mergesort s O(n log n) nebo binární vyhledávání s O(log n)." },
+    { t: "Výhody a nevýhody použití rekurze", s: "Rekurze, kdy funkce volá sama sebe na menším vstupu, je čitelná a stručná pro problémy se stromovou strukturou. Každé volání ale spotřebuje rámec na zásobníku, takže hluboká rekurze hrozí jeho přetečením. Opakovaný výpočet týchž podproblémů řeší memoizace, například naivní Fibonacci z O(2ⁿ) na O(n)." },
+    { t: "Odstranění rekurze", s: "Odstranění rekurze převede rekurzivní algoritmus na iterativní a eliminuje riziko přetečení zásobníku. Obecně se implicitní zásobník volání nahradí explicitním zásobníkem na haldě. Koncovou (tail) rekurzi, kde je rekurzivní volání poslední operací, kompilátor přepíše přímo na smyčku." },
+    { t: "Řadicí rekurzivní algoritmy", s: "Mergesort dělí pole na poloviny a slévá je, čímž dosahuje stabilního O(n log n) za cenu O(n) paměti. Quicksort dělí podle pivotu, je in-place a v průměru O(n log n), ale při špatném pivotu degraduje na O(n²). Každé porovnávací řazení má dolní mez Ω(n log n)." },
+    { t: "Vztah rekurze a matematické indukce", s: "Rekurze a indukce sdílejí strukturu: bázový případ odpovídá ukončovací podmínce a indukční krok rekurzivnímu volání na menším vstupu. Správnost rekurzivního algoritmu se proto dokazuje indukcí. Konečnost plyne z toho, že každé volání zmenšuje vstup, takže se po konečně krocích dosáhne báze." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Funkcionální programování",
+  codes: ["IB015"],
+  opener: "Funkcionální programování je paradigma, v němž se výpočet chápe jako vyhodnocování funkcí bez měnitelného stavu a vedlejších efektů. Stojí na referenční transparentnosti (stejný vstup dává vždy stejný výstup), funkcích vyšších řádů jako map, filter a fold a na líném vyhodnocování. Jeho teoretickým základem je lambda kalkul a výpočet probíhá redukčními kroky až do normálního tvaru.",
+  math: ["β-redukce: (λx. M) N → M[x := N]","map f [x₁,…,xₙ] = [f x₁, …, f xₙ]","foldr (⊕) z [x₁,…,xₙ] = x₁ ⊕ (x₂ ⊕ ( … ⊕ z))"],
+  subs: [
+    { t: "Funkcionální programovací paradigma", s: "Funkcionální paradigma staví výpočet na aplikaci matematických funkcí místo na příkazech měnících stav. Čistá funkce vrací pro stejný vstup vždy stejný výstup bez vedlejších efektů (referenční transparentnost) a data jsou neměnná. To usnadňuje testování, úvahy o správnosti i bezpečnou paralelizaci." },
+    { t: "Princip výpočtu a redukční krok", s: "Výpočet probíhá jako postupné přepisování výrazů – redukce. Redukční krok nahradí redex (přepsatelný podvýraz) pravou stranou definice s dosazenými argumenty. Proces končí v normálním tvaru, který už nelze dále přepsat; ne každý výraz ho však má." },
+    { t: "Redukční strategie a jejich vlastnosti", s: "Aplikační (striktní) strategie vyhodnotí argumenty před voláním funkce, normální (líná) až když jsou potřeba. Líné vyhodnocování umožňuje pracovat s nekonečnými strukturami, například take 5 [1..]. Podle Church–Rosserovy věty na strategii nezávisí výsledek, jen to, zda a jak rychle výpočet skončí." },
+    { t: "Funkce vyšších řádů a jejich využití", s: "Funkce vyššího řádu přijímá jiné funkce jako argument nebo je vrací. Klíčové jsou map (aplikuje funkci na prvky), filter (vybere podle predikátu) a fold (zkombinuje prvky do jediné hodnoty). Abstrahují opakující se vzory výpočtu a nahrazují explicitní cykly deklarativním stylem." },
+    { t: "Nepojmenované funkce", s: "Nepojmenovaná (lambda) funkce se definuje přímo v místě použití bez jména, například λx → x*2. Hodí se pro krátké jednorázové funkce předávané funkcím vyšších řádů. Termín pochází z lambda kalkulu, formálního základu funkcionálního programování ekvivalentního Turingovu stroji." },
+    { t: "Elementární programování v Haskellu", s: "Haskell je čistě funkcionální, líně vyhodnocovaný jazyk se silným statickým typovým systémem. Funkce se definují rovnicemi s pattern matchingem, například fact 0 = 1; fact n = n*fact (n−1). Typy se odvozují automaticky, polymorfismus zajišťují typové proměnné a třídy, vedlejší efekty řeší monády." }
+  ]
+});
+TOPICS.push(
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Regulární jazyky",
+  codes: ["IB005"],
+  opener: "Regulární jazyky jsou nejjednodušší třídou Chomského hierarchie (typ 3) a popisují vzory rozpoznatelné konečným automatem s konečnou pamětí. Mají tři ekvivalentní reprezentace: regulární výraz, pravolineární gramatiku a konečný automat (deterministický i nedeterministický). Jsou uzavřené na sjednocení, průnik i doplněk a to, že nějaký jazyk regulární není, se dokazuje pumping lemmatem.",
+  math: ["DKA: M = (Q, Σ, δ, q₀, F),  δ: Q × Σ → Q","NKA → DKA: podmnožinová konstrukce (až 2^|Q| stavů)","Příklad neregulárního jazyka: L = {aⁿbⁿ | n ≥ 0}"],
+  subs: [
+    { t: "Chomského hierarchie formálních jazyků", s: "Chomského hierarchie klasifikuje jazyky do čtyř úrovní podle síly: regulární (typ 3, konečný automat), bezkontextové (typ 2, zásobníkový automat), kontextové (typ 1) a rekurzivně spočetné (typ 0, Turingův stroj). Každá vyšší třída ostře zahrnuje nižší. Generuje je gramatika G=(N,Σ,P,S), jejíž tvar pravidel určuje typ." },
+    { t: "Regulární jazyky, jejich reprezentace a převody", s: "Regulární jazyk lze ekvivalentně popsat regulárním výrazem, pravolineární gramatikou nebo konečným automatem. Mezi reprezentacemi existují algoritmické převody, například Thompsonova konstrukce z regexpu na NKA a podmnožinová konstrukce na DKA. To, že všechny tři popisují tutéž třídu, je stěžejní výsledek teorie." },
+    { t: "Varianty konečných automatů", s: "Konečný automat je pětice (Q, Σ, δ, q₀, F). DKA má pro stav a symbol nejvýše jeden přechod, NKA jich může mít více a přijímá, existuje-li alespoň jeden přijímající výpočet; ε-NKA dovolí přechody bez čtení symbolu. Všechny varianty rozpoznávají přesně regulární jazyky." },
+    { t: "Nedeterminismus a determinizace automatů", s: "Nedeterministický automat může mít pro stav a symbol více přechodů a vstup přijme, existuje-li aspoň jedna přijímající větev. Podmnožinová konstrukce ho převede na DKA, jehož stavy jsou množiny stavů NKA, s možným exponenciálním nárůstem. Nedeterminismus tedy u konečných automatů nepřidává sílu, jen kompaktnost." },
+    { t: "Uzávěrové vlastnosti regulárních jazyků", s: "Regulární jazyky jsou uzavřené na sjednocení, průnik, doplněk, zřetězení i Kleeneho iteraci, což se dokazuje konstrukcí nad automaty. Pumping lemma slouží k důkazu, že jazyk regulární není – typicky {aⁿbⁿ}. Myhillova–Nerodova věta charakterizuje regularitu konečným indexem pravé kongruence." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Bezkontextové jazyky a jejich reprezentace",
+  codes: ["IB005"],
+  opener: "Bezkontextové jazyky tvoří typ 2 Chomského hierarchie a popisují je bezkontextové gramatiky a zásobníkové automaty, jejichž zásobník dává paměť navíc oproti konečnému automatu. Umožňují popsat vnořené struktury jako párování závorek nebo aritmetické výrazy, a jsou proto základem syntaktické analýzy programovacích jazyků. Jsou uzavřené na sjednocení, nikoli však na průnik.",
+  math: ["Gramatika: G = (N, Σ, P, S),  pravidla A → α, α ∈ (N ∪ Σ)*","Zásobníkový automat rozpozná L = {aⁿbⁿ | n ≥ 0}","{aⁿbⁿcⁿ} už bezkontextový není (pumping lemma pro CFL)"],
+  subs: [
+    { t: "Varianty zásobníkových automatů", s: "Zásobníkový automat je konečný automat doplněný o zásobník neomezené kapacity (LIFO). Zásobník umožňuje pamatovat si hloubku vnoření nebo počet nespárovaných symbolů, což konečný automat nedokáže. Nedeterministické zásobníkové automaty rozpoznávají bezkontextové jazyky, deterministické jen jejich podtřídu." },
+    { t: "Metody akceptování", s: "Zásobníkový automat může přijímat dvěma způsoby – koncovým (přijímajícím) stavem, nebo prázdným zásobníkem. Pro nedeterministické automaty jsou obě metody stejně silné a existuje mezi nimi převod. V praxi parserů se používá přijímání stavem." },
+    { t: "Determinismus a nedeterminismus", s: "Deterministický zásobníkový automat má v každé konfiguraci nejvýše jeden krok a rozpoznává jen vlastní podtřídu DCFL. Nedeterministický rozpoznává celou třídu bezkontextových jazyků – například palindromy zvládne jen on. Na rozdíl od konečných automatů zde tedy determinizace sílu ztrácí." },
+    { t: "Nedeterministická syntaktická analýza", s: "Syntaktická analýza ověřuje příslušnost řetězce k jazyku a buduje derivační strom; probíhá shora dolů (LL) nebo zdola nahoru (LR). Obecné bezkontextové gramatiky zvládnou algoritmy CYK a Earley v O(n³). Gramatika je víceznačná, má-li nějaké slovo dva různé derivační stromy." },
+    { t: "Uzávěrové vlastnosti bezkontextových jazyků", s: "Bezkontextové jazyky jsou uzavřené na sjednocení, zřetězení a Kleeneho iteraci, ale nikoli na průnik ani doplněk. Průnik bezkontextového a regulárního jazyka je ale opět bezkontextový. Nebezkontextovost se dokazuje pumping lemmatem pro CFL, klasicky pro {aⁿbⁿcⁿ}." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Rozhodnutelnost",
+  codes: ["IB107"],
+  opener: "Teorie rozhodnutelnosti zkoumá, které problémy lze vůbec algoritmicky vyřešit. Formálním modelem výpočtu je Turingův stroj a problém je rozhodnutelný, existuje-li algoritmus, který pro každý vstup po konečném čase vydá správnou odpověď ANO/NE. Existují však principiálně neřešitelné problémy — klasickým příkladem je problém zastavení, jehož nerozhodnutelnost se dokazuje diagonalizací.",
+  math: ["Rozhodnutelný: algoritmus vždy skončí se správnou odpovědí","Částečně rozhodnutelný: skončí na ANO, na NE se může zacyklit","Problém zastavení (HALT) je nerozhodnutelný (důkaz sporem/diagonalizací)"],
+  subs: [
+    { t: "Pojem algoritmického problému a algoritmu", s: "Algoritmický problém je úloha popsaná relací mezi vstupy a výstupy; u rozhodovacího problému je odpověď ANO/NE. Algoritmus je konečný, jednoznačný a obecný postup, který pro každý vstup po konečně krocích vydá správný výstup. Formalizují ho výpočetní modely jako Turingův stroj, jež podle Churchovy–Turingovy teze zachycují tutéž třídu vyčíslitelných funkcí." },
+    { t: "Turingův stroj", s: "Turingův stroj je abstraktní výpočetní model s nekonečnou páskou, čtecí hlavou a konečným řízením; v každém kroku přečte a přepíše symbol, posune hlavu a změní stav. Přes svou jednoduchost je výpočetně univerzální a podle Churchovy–Turingovy teze zachycuje vše efektivně vypočitatelné. Univerzální Turingův stroj dokáže simulovat libovolný jiný ze zakódovaného popisu." },
+    { t: "Problém zastavení", s: "Problém zastavení je úloha rozhodnout, zda daný program na daném vstupu skončí. Turing dokázal diagonalizací, že je nerozhodnutelný – předpoklad existence rozhodovacího algoritmu vede ke sporu. Je však částečně rozhodnutelný: program prostě spustíme a u zastavení odpovíme ANO." },
+    { t: "Rozhodnutelnost a částečná rozhodnutelnost", s: "Rozhodnutelný problém má algoritmus, který pro každý vstup zastaví se správnou odpovědí. Částečně rozhodnutelný (rekurzivně spočetný) zastaví s ANO na kladných vstupech, na záporných se může zacyklit. Problém je rozhodnutelný právě tehdy, když jsou částečně rozhodnutelné on i jeho doplněk." },
+    { t: "Nerozhodnutelnost", s: "Nerozhodnutelný problém nemá žádný algoritmus řešící jej pro všechny vstupy, bez ohledu na výkon počítače. Příkladem je problém zastavení nebo ekvivalence dvou programů. Riceova věta zobecňuje: každá netriviální sémantická vlastnost programů je nerozhodnutelná." },
+    { t: "Metoda redukce", s: "Redukce A ≤ B převádí problém A na problém B vyčíslitelnou funkcí tak, že x∈A právě když f(x)∈B. Je-li A nerozhodnutelný a A ≤ B, pak je nerozhodnutelný i B. Nerozhodnutelnost nového problému se tak typicky dokazuje redukcí z problému zastavení." },
+    { t: "Diagonalizace", s: "Diagonalizace konstruuje objekt, který se od každého prvku seznamu liší na úhlopříčce, a proto v seznamu být nemůže. Cantor jí dokázal nespočetnost reálných čísel, Turing nerozhodnutelnost problému zastavení. Využívá se i v teorii složitosti k oddělení tříd, například P ≠ EXP." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Složitost",
+  codes: ["IB107"],
+  opener: "Teorie složitosti měří, kolik času a paměti algoritmus potřebuje v závislosti na velikosti vstupu, a klasifikuje problémy do složitostních tříd. Třída P obsahuje problémy řešitelné v polynomiálním čase, třída NP problémy s polynomiálně ověřitelným řešením; nejtěžší problémy v NP jsou NP-úplné, například SAT. Zda platí P = NP, je nejslavnějším otevřeným problémem informatiky.",
+  math: ["Inkluze tříd: P ⊆ NP ⊆ PSPACE","NP-úplný = leží v NP a každý problém z NP se naň polynomiálně redukuje","Cookova–Levinova věta: SAT je NP-úplný"],
+  subs: [
+    { t: "Složitost algoritmu versus složitost problému", s: "Složitost algoritmu udává spotřebu zdrojů v závislosti na velikosti vstupu, vyjádřenou asymptoticky O (horní mez), Ω (dolní mez) a Θ (přesná mez). Složitost problému je složitost nejlepšího možného algoritmu a je vlastností problému, nikoli řešení. Souhlasí-li dolní a horní mez, je algoritmus optimální." },
+    { t: "Složitostní třídy (P, NP, PSPACE)", s: "Třída P obsahuje problémy řešitelné v polynomiálním čase, NP problémy s polynomiálně ověřitelným certifikátem a PSPACE problémy řešitelné v polynomiálním prostoru. Platí P ⊆ NP ⊆ PSPACE ⊆ EXP. Třída P odpovídá prakticky zvládnutelným problémům, jako třídění nebo nejkratší cesta." },
+    { t: "Vztahy mezi třídami a příklady problémů", s: "Platí řetězec L ⊆ NL ⊆ P ⊆ NP ⊆ PSPACE ⊆ EXP a podle Savitchovy věty PSPACE = NPSPACE. Tyto inkluze jsou dokazatelné, ale jejich ostrost je až na P ≠ EXP otevřená. Otázka, zda platí P = NP, je nejslavnějším otevřeným problémem oboru." },
+    { t: "Těžkost a úplnost problému", s: "Problém je C-těžký, redukuje-li se na něj polynomiálně každý problém z třídy C; je C-úplný, je-li navíc sám v C. NP-úplné problémy jsou nejtěžší v NP a jejich polynomiální algoritmus by znamenal P=NP. Polynomiální redukce zachovává ANO/NE odpovědi a je tranzitivní." },
+    { t: "Polynomiální redukce problémů", s: "Polynomiální redukce A ≤ₚ B je funkce vyčíslitelná v polynomiálním čase s x∈A právě když f(x)∈B. Je tranzitivní a přenáší řešitelnost: je-li B v P, je v P i A. NP-úplnost nového problému se dokazuje příslušností do NP a redukcí ze známého NP-úplného problému." },
+    { t: "NP-úplné úlohy", s: "NP-úplné problémy jsou nejtěžší v NP; prvním byl SAT podle Cookovy–Levinovy věty. Mezi další patří 3-SAT, barvení grafu, problém obchodního cestujícího, batoh a klika. Řeší se aproximačními nebo parametrizovanými algoritmy, protože přesné řešení je výpočetně náročné." }
+  ]
+});
+TOPICS.push(
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Principy strojového učení",
+  codes: ["IB031"],
+  opener: "Strojové učení je obor umělé inteligence, v němž se model učí vzory přímo z dat místo explicitního naprogramování pravidel. Rozlišujeme učení s učitelem (na označených datech — klasifikace a regrese), bez učitele (hledání skryté struktury — shlukování) a posilované učení. Klíčovým problémem je zobecnění: model nesmí být přeučený, proto se jeho kvalita měří na oddělených testovacích datech.",
+  math: ["Přeučení: vysoká přesnost na trénovacích, nízká na testovacích datech","Rozdělení dat: trénovací / validační / testovací (např. 80 / 0 / 20)","Entropie (rozhodovací strom): H = − Σ pᵢ·log₂ pᵢ"],
+  subs: [
+    { t: "Učení s učitelem a bez učitele", s: "Učení s učitelem trénuje na dvojicích vstup–správný výstup a dělí se na klasifikaci a regresi. Učení bez učitele hledá v neoznačených datech skrytou strukturu, například shluky. Posilované učení se učí z odměn za akce v prostředí." },
+    { t: "Proces trénování modelů a vyhodnocování výsledků", s: "Data se dělí na trénovací, validační a testovací část, přičemž testovací zůstanou striktně oddělené pro finální vyhodnocení. Přeučení znamená vysokou přesnost na trénovacích, ale nízkou na testovacích datech; nedoučení příliš jednoduchý model. Kvalita se měří metrikami jako přesnost, preciznost, úplnost a F1 z matice záměn." },
+    { t: "Učení rozhodovacích stromů", s: "Rozhodovací strom klasifikuje vstup posloupností testů atributů od kořene k listu. Buduje se shora dolů hladovým výběrem nejinformativnějšího atributu podle informačního zisku (poklesu entropie). Je dobře interpretovatelný, ale náchylný k přeučení; ansámbly jako náhodný les jej zpřesní." },
+    { t: "Metoda k nejbližších sousedů", s: "k-NN klasifikuje nový bod podle většiny mezi jeho k nejbližšími sousedy v trénovacích datech. Jde o líné učení – model se nestaví, jen se pamatují data a výpočet se odkládá na predikci. Malé k je citlivé na šum, velké hranice vyhlazuje; nutná je normalizace vstupů." },
+    { t: "(Naivní) Bayesovský klasifikátor", s: "Bayesovský klasifikátor přiřadí třídu s maximální aposteriori pravděpodobností P(C|x) ∝ P(x|C)·P(C). Naivní varianta předpokládá podmíněnou nezávislost atributů, takže P(x|C) je součin pravděpodobností jednotlivých atributů. Přes zjednodušení funguje výborně pro klasifikaci textu, například spamu." },
+    { t: "Logistická regrese", s: "Logistická regrese je lineární model pro binární klasifikaci, jehož výstupem je pravděpodobnost příslušnosti ke třídě. Lineární kombinaci vstupů protáhne sigmoidou, která ji zobrazí do intervalu (0,1). Trénuje se minimalizací křížové entropie gradientním sestupem; přes název jde o klasifikaci." },
+    { t: "Detekce anomálií", s: "Detekce anomálií hledá vzorky výrazně odlišné od ostatních. Typicky se natrénuje model normálního chování a body se skóre nad prahem se označí za anomálie. Metody sahají od statistických (vzdálenost od průměru přes k·σ) po Isolation Forest a autoenkodéry; využití je detekce podvodů či útoků." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Metody strojového učení",
+  codes: ["IB031"],
+  opener: "Metody strojového učení jsou konkrétní algoritmy učení modelů z dat. Patří mezi ně lineární regrese metodou nejmenších čtverců, shlukování (hierarchické a k-means) a umělé neuronové sítě. Sítě se učí gradientním sestupem, který iterativně posouvá parametry proti směru gradientu chybové funkce; díky skryté vrstvě zvládne vícevrstvá síť i lineárně neoddělitelné úlohy jako XOR.",
+  math: ["Nejmenší čtverce: minimalizuj Σ (yᵢ − ŷᵢ)²","Gradientní sestup: w ← w − η·∇L(w)","Neuron: y = f(Σ wᵢxᵢ + b),  f je aktivační funkce"],
+  subs: [
+    { t: "Lineární regrese a metoda nejmenších čtverců", s: "Lineární regrese modeluje spojitý výstup jako lineární kombinaci vstupů ŷ = wᵀx. Parametry se určí metodou nejmenších čtverců, která minimalizuje součet kvadrátů odchylek. Existuje uzavřené řešení (normální rovnice) i iterativní gradientní sestup pro velká data." },
+    { t: "Hierarchické shlukování", s: "Hierarchické shlukování buduje stromovou hierarchii shluků bez nutnosti předem zadat jejich počet. Aglomerativní přístup začne s každým bodem jako shlukem a opakovaně slučuje nejbližší dvojice podle zvoleného linkage. Výsledkem je dendrogram, jehož řezem získáme konkrétní počet shluků." },
+    { t: "Algoritmus k-means", s: "k-means rozdělí body do k shluků minimalizací součtu čtvercových vzdáleností od centroidů. Střídá dva kroky: přiřazení bodů k nejbližšímu centroidu a přepočet centroidů jako průměru. Konverguje k lokálnímu minimu, takže výsledek závisí na inicializaci a počet k je třeba zadat předem." },
+    { t: "Model umělého neuronu", s: "Umělý neuron spočítá vážený součet vstupů s biasem a aplikuje aktivační funkci: y = f(Σ wᵢxᵢ + b). Aktivační funkce (sigmoid, tanh, ReLU) zavádí nelinearitu, bez níž by vrstvení bylo zbytečné. Jediný neuron je lineární klasifikátor a neumí oddělit XOR." },
+    { t: "Vícevrstvé sítě a jejich vyjadřovací schopnosti", s: "Vícevrstvá síť skládá vrstvy neuronů, kde nižší vrstvy zachycují jednoduché rysy a vyšší složitější. Podle věty o univerzální aproximaci dokáže síť s jednou dostatečně širokou skrytou vrstvou aproximovat libovolnou spojitou funkci. Riziko přeučení roste s počtem parametrů a sítě jsou hůře vysvětlitelné („černá skříňka”)." },
+    { t: "Učení modelů pomocí gradientního sestupu", s: "Gradientní sestup aktualizuje parametry proti směru gradientu chybové funkce: θ ← θ − η·∇L. Podle množství dat na krok rozlišujeme dávkový, stochastický a mini-batch sestup. Gradienty přes vrstvy sítě efektivně počítá zpětná propagace (backpropagation) řetízkovým pravidlem." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Umělá inteligence",
+  codes: ["PB016"],
+  opener: "Umělá inteligence se zabývá tvorbou systémů řešících úlohy, které u člověka vyžadují inteligenci. Mezi její klasické metody patří prohledávání stavového prostoru — neinformované (BFS, DFS) i heuristické (algoritmus A*) — řešení problémů s omezujícími podmínkami a herní strategie. U dvouhráčových her s úplnou informací se používá algoritmus minimax s alfa-beta ořezáváním.",
+  math: ["A*: rozvíjí stav s nejmenším f(n) = g(n) + h(n)","Přípustná heuristika: h(n) ≤ skutečná zbývající cena ⟹ A* je optimální","Minimax: MAX volí maximum, MIN minimum z hodnot potomků"],
+  subs: [
+    { t: "Vymezení umělé inteligence", s: "Umělá inteligence vytváří systémy schopné chování, jež u člověka považujeme za projev inteligence – vnímání, uvažování, plánování, řešení problémů. Slabá (úzká) AI exceluje v jedné doméně, hypotetická obecná AI by měla lidskou všestrannost. Klasická AI je symbolická (pravidla a prohledávání), moderní je dominantně sub-symbolická (neuronové sítě)." },
+    { t: "Turingův test", s: "Turingův test navrhuje operační kritérium inteligence: pokud soudce v textové konverzaci nerozliší stroj od člověka, stroj testem prošel. Posuzuje pozorovatelné chování, nikoli vnitřní porozumění. Hlavní kritikou je Searleův argument čínského pokoje, podle něhož lze test projít pouhou manipulací se symboly bez porozumění." },
+    { t: "Prohledávání stavového prostoru – neinformované", s: "Stavový prostor tvoří stavy, počáteční stav, cíle, akce a přechodová funkce; řešením je cesta k cíli. BFS prohledává po vrstvách a najde nejkratší cestu, ale s exponenciální pamětí; DFS má malou paměť, ale může se zacyklit. Uniform-cost search prohledává podle ceny cesty a odpovídá Dijkstrovu algoritmu." },
+    { t: "Prohledávání stavového prostoru – heuristické", s: "Heuristika h(n) odhaduje cenu zbývající cesty do cíle a směruje prohledávání. Algoritmus A* kombinuje dosavadní cenu a heuristiku, f(n)=g(n)+h(n). Je-li heuristika přípustná (nikdy nepřecení), najde A* optimální řešení; konzistentní heuristika to zaručuje i pro grafové prohledávání." },
+    { t: "Problémy s omezujícími podmínkami", s: "CSP je trojice proměnných, jejich domén a omezení; cílem je najít přiřazení splňující všechna omezení. Příkladem je barvení grafu, sudoku nebo N dam. Řeší se backtrackingem, urychleným propagací omezení (forward checking, AC-3) a heuristikami MRV a LCV." },
+    { t: "Hry a herní strategie (minimax, alfa-beta, ohodnocovací funkce)", s: "Pro hry dvou hráčů s nulovým součtem slouží minimax: MAX maximalizuje, MIN minimalizuje hodnotu, oba předpokládají optimální hru. Alfa-beta ořezávání odřízne větve, které nemohou ovlivnit výsledek, a umožní hlubší prohledání. Ohodnocovací funkce odhaduje výhodnost stavu při omezené hloubce; pro hry s náhodou slouží expectiminimax." }
+  ]
+},
+{
+  cat: "Matematika a teoretická informatika",
+  title: "Matematická logika",
+  codes: ["IB000", "PB016"],
+  opener: "Matematická logika formálně studuje pravdivost, vyplývání a dokazatelnost tvrzení. Výroková logika pracuje s výroky spojenými logickými spojkami, predikátová logika přidává kvantifikátory a predikáty pro vyjadřování o objektech. Klíčové jsou pojmy splnitelnost a tautologie a vztah mezi dokazatelností (syntaxí) a pravdivostí (sémantikou), který propojují věty o korektnosti a úplnosti.",
+  math: ["Tautologie: pravdivá při každém ohodnocení;  A → B ≡ ¬A ∨ B","Korektnost: dokazatelné ⟹ pravdivé","Úplnost: pravdivé ⟹ dokazatelné","Rezoluce: z {A, B} a {¬A} plyne {B}; prázdná klauzule = spor"],
+  subs: [
+    { t: "Výroková logika", s: "Výroková logika pracuje s atomickými výroky s hodnotami 0/1 a skládá je spojkami negace, konjunkce, disjunkce, implikace a ekvivalence. Pravdivost složené formule určuje pravdivostní tabulka. Je rozhodnutelná, ale nezabývá se vnitřní strukturou výroků – na to slouží predikátová logika." },
+    { t: "Predikátová logika", s: "Predikátová logika prvního řádu rozšiřuje výrokovou o individua, predikáty, funkce a kvantifikátory ∀ a ∃. Umožňuje formalizovat tvrzení o objektech, například „každý člověk je smrtelný”. Je výrazově silnější, ale na rozdíl od výrokové logiky je nerozhodnutelná (jen semi-rozhodnutelná)." },
+    { t: "Splnitelnost", s: "Formule je splnitelná, existuje-li alespoň jedno ohodnocení, při kterém je pravdivá; jinak je nesplnitelná (kontradikce). Ověřuje se prohledáváním prostoru ohodnocení, jichž je pro n atomů 2ⁿ. SAT, splnitelnost výrokové formule v CNF, je historicky první NP-úplný problém." },
+    { t: "Pravdivost", s: "Formule je logicky pravdivá (tautologie), je-li pravdivá při každém ohodnocení, například A∨¬A. Pravdivost je silnější než splnitelnost – každá tautologie je splnitelná, ne naopak. Formule je tautologie právě tehdy, když je její negace nesplnitelná." },
+    { t: "Dokazatelnost", s: "Formule je dokazatelná, lze-li ji odvodit z axiomů konečnou posloupností kroků podle pravidel kalkulu – jde o syntaktický pojem, na rozdíl od sémantické pravdivosti. Věta o korektnosti říká, že dokazatelné je pravdivé, Gödelova věta o úplnosti, že pro logiku prvního řádu je pravdivé i dokazatelné. Gödelovy věty o neúplnosti ukazují meze dostatečně silných teorií." },
+    { t: "Důkazové metody", s: "Přímý důkaz odvozuje závěr řetězem implikací, důkaz sporem předpokládá opak a dojde ke kontradikci, kontrapozice dokazuje ¬B→¬A. Matematická indukce dokazuje tvrzení pro všechna n bází a indukčním krokem. Konstruktivní důkaz existenci dokládá explicitní konstrukcí." },
+    { t: "Rezoluční metoda", s: "Rezoluce je refutační technika: znegujeme tvrzení, převedeme na klauzule v CNF a opakovaně z dvojic s komplementárním literálem odvozujeme rezolventy. Vznikne-li prázdná klauzule, byl nalezen spor a tvrzení platí. Je úplná pro výrokovou i predikátovou logiku (s unifikací) a tvoří základ Prologu." },
+    { t: "Reprezentace a vyvozování znalostí", s: "Znalostní báze ukládá fakta a pravidla a inferenční stroj z nich vyvozuje nové závěry. Hornovy klauzule a SLD-rezoluce jsou základem Prologu; vyvozovat lze dopředně i zpětně. Pro nejisté znalosti slouží bayesovské sítě, pro ontologie sémantické sítě a znalostní grafy." }
+  ]
+});
+TOPICS.push(
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Strukturování a řízení běhu programu",
+  codes: ["PB006"],
+  opener: "Tento okruh se zabývá organizací kódu pomocí podprogramů, rozsahů platnosti jmen, předávání parametrů, výjimek a principů objektově orientovaného programování. OOP sdružuje data a chování do objektů a stojí na čtyřech pilířích: zapouzdření, dědičnost, polymorfismus a abstrakce. Tyto principy zvyšují znovupoužitelnost, čitelnost a udržovatelnost kódu.",
+  math: null,
+  subs: [
+    { t: "Podprogramy", s: "Podprogram je pojmenovaný, parametrizovaný a opakovaně volatelný blok kódu řešící dílčí úlohu. Měl by mít jednu jasnou odpovědnost, což usnadňuje testování i údržbu. Při každém volání vznikne na zásobníku aktivační záznam s parametry, lokálními proměnnými a adresou návratu." },
+    { t: "Rozsahy jmen", s: "Rozsah platnosti je oblast kódu, kde je identifikátor viditelný; běžné je lexikální (statické) určení podle struktury textu. Lokální proměnná existuje jen ve své funkci nebo bloku, globální po celou dobu běhu. Stínování, kdy lokální jméno skryje globální, je častým zdrojem chyb." },
+    { t: "Předávání hodnot", s: "Při předávání hodnotou pracuje funkce s kopií, takže změna parametru neovlivní originál; při předávání odkazem může měnit data volajícího. U objektů se často předává sdílená reference, takže změna atributů je viditelná, ale přiřazení parametru ne. Funkce vrací výsledek přes return, více hodnot přes n-tici nebo strukturu." },
+    { t: "Výjimky", s: "Výjimkový mechanismus odděluje normální tok kódu (try) od ošetření chyb (catch). Vyhozená výjimka přeruší běh a odmotává zásobník, dokud nenajde vhodný catch; blok finally se provede vždy, typicky pro uvolnění zdrojů. Catch bloky se řadí od nejspecifičtějšího k nejobecnějšímu." },
+    { t: "Objektově orientované programování", s: "OOP strukturuje program kolem objektů, instancí tříd, které sdružují data a chování. Třída je šablona, objekt konkrétní instance vytvořená konstruktorem. Stojí na čtyřech pilířích: abstrakce, zapouzdření, dědičnost a polymorfismus." },
+    { t: "Zapouzdření", s: "Zapouzdření skrývá vnitřní implementaci objektu a zpřístupňuje jen definované veřejné rozhraní. Přístupové modifikátory (private, protected, public) chrání data a umožňují udržet invarianty třídy, například nezáporný věk. Implementaci lze pak změnit bez dopadu na klienta." },
+    { t: "Dědičnost", s: "Dědičnost umožňuje odvodit novou třídu z existující; potomek zdědí atributy a metody předka a může je rozšířit nebo přepsat. Vyjadřuje vztah „je druhem” a podle Liskovové principu lze potomka bezpečně použít místo předka. Alternativou k nadměrnému dědění je kompozice (vztah „má”)." },
+    { t: "Polymorfismus", s: "Polymorfismus umožňuje pracovat s objekty různých tříd jednotně přes společné rozhraní. Při subtypovém polymorfismu vybere dynamická vazba za běhu implementaci podle skutečného typu objektu. Bez něj by klient musel větvit podle typu; generika navíc poskytují parametrický polymorfismus." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Principy nízkoúrovňového programování",
+  codes: ["PB071 / PB111"],
+  opener: "Nízkoúrovňové programování se zabývá přímou prací s pamětí a ukazateli, typicky v jazyce C. Paměť programu se dělí na zásobník (lokální proměnné), haldu (dynamická alokace přes malloc/free) a statická data; ukazatel uchovává adresu a umožňuje nepřímý přístup k hodnotě. Chyby jako únik paměti, zápis mimo meze pole nebo použití uvolněné paměti vedou k pádům i bezpečnostním zranitelnostem.",
+  math: ["Ukazatel: p = &x (adresa),  *p (hodnota na adrese)","Pole a aritmetika ukazatelů: a[i] ≡ *(a + i)","Každý malloc musí mít právě jeden odpovídající free"],
+  subs: [
+    { t: "Paměťový model programu", s: "Adresní prostor procesu se dělí na segment kódu, statická a neinicializovaná data (BSS), zásobník a haldu. Zásobník roste při volání funkcí a drží lokální proměnné a návratové adresy; halda slouží pro dynamickou alokaci. Zásobník a halda rostou proti sobě a jejich přetečení způsobí pád." },
+    { t: "Správa paměti a dynamická alokace", s: "Na haldě se alokuje pomocí malloc/free v C nebo new/delete v C++, přičemž každá alokace musí mít právě jedno uvolnění. Memory leak vzniká neuvolněním paměti, dangling pointer ukazuje na uvolněnou paměť. Tyto chyby spolu s double free a use-after-free odhalí Valgrind nebo AddressSanitizer." },
+    { t: "Práce s uživatelskými datovými strukturami", s: "Pomocí ukazatelů a dynamické alokace se v C staví struktury jako spojový seznam či binární strom – uzly se alokují na haldě a propojují ukazateli. Při mazání uzlu je nutné nejprve přepojit ukazatele a teprve pak uvolnit paměť, jinak vznikne dangling pointer. Vlastní typy tvoří struct, union, enum a typedef." },
+    { t: "Nízkoúrovňová práce s pamětí", s: "Přímá práce s pamětí používá funkce memcpy, memmove, memset a memcmp a respektuje zarovnání (alignment) datových typů. Bitové operace (maskování, posuny) umožňují kompaktní práci s příznaky. Přetečení zásobníku přepsáním návratové adresy je klasická zranitelnost, proti níž chrání stack canary a ASLR." },
+    { t: "Ukazatel", s: "Ukazatel je proměnná, jejíž hodnotou je paměťová adresa; operátor & vrací adresu, operátor * ji dereferencuje. NULL značí prázdný ukazatel a jeho dereference způsobí segmentation fault. Ukazatele umožňují předávání parametrů odkazem, callbacky přes funkční ukazatele i dynamické struktury." },
+    { t: "Pole a ukazatelová aritmetika", s: "Jméno pole je ukazatel na první prvek a indexování a[i] je ekvivalentní *(a+i). Ukazatelová aritmetika automaticky škáluje posun velikostí prvku, takže je přenositelná. C nehlídá meze pole, takže zápis za jeho konec tiše přepíše cizí paměť – zdroj buffer overflow." },
+    { t: "Způsoby ladění programu (debugging)", s: "Debugger (GDB) umožňuje krokovat program, nastavovat breakpointy a watchpointy a zkoumat zásobník volání a hodnoty proměnných. Jednodušší je printf debugging, statická analýza odhalí chyby bez spuštění. Valgrind a AddressSanitizer detekují paměťové chyby za běhu, core dump umožní post-mortem analýzu po pádu." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Architektury",
+  codes: ["PB150 / PB151"],
+  opener: "Počítačová architektura popisuje uspořádání počítače od reprezentace čísel po procesor a paměti. Celá čísla se ukládají ve dvojkové soustavě a záporná v doplňkovém kódu; procesor opakuje cyklus načti–dekóduj–vykonej. Architektury se dělí na RISC (málo jednoduchých instrukcí pevné délky) a CISC (mnoho složitějších), přičemž cache zrychluje přístup k paměti díky lokalitě.",
+  math: ["Doplňkový kód: −x na n bitech = 2ⁿ − x","Rozsah n-bitového celého se znaménkem: [−2ⁿ⁻¹, 2ⁿ⁻¹ − 1]","Cyklus instrukce: fetch → decode → execute"],
+  subs: [
+    { t: "Číselné soustavy a vztahy mezi nimi", s: "Číselná soustava o základu r zapisuje číslo jako polynom v r; v počítači je základní dvojková soustava odpovídající dvěma stavům tranzistoru. Šestnáctková soustava je zkratka, kde jedna cifra odpovídá čtyřem bitům. Převod z desítkové do dvojkové se dělá opakovaným dělením dvěma se zbytky." },
+    { t: "Zobrazení celého čísla v počítači a aritmetika", s: "Celá čísla se ukládají na pevný počet bitů, bezznaménková v rozsahu 0 až 2ⁿ−1. Záporná se nejčastěji kódují doplňkovým kódem, kde −k je negace k plus 1, což umožní jednotný sčítací obvod. Existují i přímý, inverzní a posunutý kód; reálná čísla kóduje IEEE 754." },
+    { t: "Kódy (vnitřní, vnější, detekční a opravné)", s: "Vnitřní kódy reprezentují data v počítači (ASCII, UTF-8, doplňkový kód, IEEE 754), vnější slouží pro přenos (Base64). Detekční kódy chybu jen odhalí (parita, CRC), opravné ji i opraví. Hammingův kód [7,4] opraví jeden bit, Reedův–Solomonův i shluky chyb na CD či v QR kódech." },
+    { t: "Obvody a paměti (parametry, architektura)", s: "Logické brány jsou základní stavební bloky; kombinační obvody (sčítačka, multiplexer) závisí jen na vstupech, sekvenční (klopné obvody) mají vnitřní stav. Z klopných obvodů se staví registry a čítače. Paměti se liší rychlostí a cenou: SRAM slouží jako cache, DRAM jako hlavní paměť, Flash jako nevolatilní úložiště." },
+    { t: "Procesor, programování, mikroprogramování", s: "Procesor pracuje v cyklu fetch–decode–execute řízeném programovým čítačem. Instrukční sada definuje dostupné operace, registry jsou nejrychlejší úložiště. U CISC realizuje složité instrukce mikroprogram, pipeline zpracovává instrukce paralelně po stupních; von Neumannova architektura sdílí paměť programu a dat." },
+    { t: "Architektury RISC/CISC a vyrovnávací paměti", s: "RISC má málo jednoduchých instrukcí pevné délky a přístup k paměti jen přes load/store, CISC mnoho složitějších instrukcí proměnné délky. Moderní x86 překládá CISC instrukce na vnitřní RISC mikrooperace. Paměťová hierarchie od registrů přes L1–L3 cache po RAM využívá časovou a prostorovou lokalitu." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Databáze",
+  codes: ["PB154"],
+  opener: "Databáze je organizovaná kolekce dat; nejrozšířenější je relační model, kde data tvoří tabulky (relace) složené z řádků (n-tic) a sloupců (atributů). Integritu zajišťují klíče — primární klíč jednoznačně identifikuje řádek, cizí klíč odkazuje na jinou tabulku. Návrh kvalitního schématu vede přes funkční závislosti a normální formy (1NF až BCNF), které odstraňují redundanci a aktualizační anomálie.",
+  math: ["Funkční závislost: X → Y (hodnota X určuje hodnotu Y)","Hierarchie forem: BCNF ⟹ 3NF ⟹ 2NF ⟹ 1NF","Relace = podmnožina kartézského součinu domén atributů"],
+  subs: [
+    { t: "Relační model dat", s: "Relační model reprezentuje data relacemi – tabulkami s pojmenovanými atributy a n-ticemi. Relace je množina, takže nezáleží na pořadí řádků ani sloupců a hodnoty jsou atomické (1NF). Model má matematický základ (relační algebra), standardní jazyk SQL a silné záruky konzistence (ACID)." },
+    { t: "Relační schéma", s: "Relační schéma popisuje název relace, atributy a jejich domény; schéma databáze je souhrn všech schémat plus integritní omezení. Schéma je neměnný předpis, jeho instance je konkrétní aktuální množina n-tic. Hodnota NULL reprezentuje neznámou hodnotu, přičemž NULL = NULL dává v SQL UNKNOWN." },
+    { t: "Klíče relačních schémat", s: "Superklíč jednoznačně identifikuje řádek, kandidátní klíč je minimální superklíč. Primární klíč se vybírá z kandidátních a nesmí být NULL (entitní integrita). Cizí klíč odkazuje na primární klíč jiné relace a vynucuje referenční integritu." },
+    { t: "Relační algebra (projekce, selekce, agregace, přejmenování)", s: "Relační algebra je procedurální dotazovací jazyk, jehož operace berou relace a vracejí relaci. Selekce vybírá řádky podle podmínky, projekce sloupce, přejmenování mění názvy. Doplňují je množinové operace, kartézský součin, spojení (join) a agregace s GROUP BY." },
+    { t: "Spojování relací", s: "JOIN kombinuje n-tice ze dvou relací podle podmínky; INNER JOIN vrátí jen spárované řádky, OUTER JOIN zachová i nespárované s NULL. Přirozené spojení joinuje přes stejnojmenné atributy, self-join spojuje tabulku samu se sebou. Implementačně se používá nested loop, hash nebo merge join podle dat." },
+    { t: "Funkční závislosti", s: "Funkční závislost X→Y znamená, že hodnoty X jednoznačně určují hodnoty Y. Z daných závislostí se odvozují další pomocí Armstrongových axiomů (reflexivita, rozšíření, tranzitivita). Uzávěr X⁺ je množina všech atributů závislých na X; je-li roven celé relaci, je X nadklíč." },
+    { t: "Normální formy (1NF, 2NF, 3NF, BCNF)", s: "Normální formy postupně odstraňují redundanci: 1NF vyžaduje atomické hodnoty, 2NF plnou závislost na celém klíči, 3NF zákaz tranzitivních závislostí. BCNF požaduje, aby levá strana každé netriviální závislosti byla nadklíčem. Vyšší forma je přísnější a zmenšuje aktualizační anomálie." },
+    { t: "Vztahy mezi normálními formami", s: "Normální formy tvoří inkluzi BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF, takže vyšší forma splňuje všechny nižší. Nižší formy trpí aktualizačními anomáliemi (vkládací, modifikační, mazací), které vyšší formy eliminují. V praxi se u OLTP cílí na 3NF nebo BCNF, u OLAP se naopak záměrně denormalizuje." },
+    { t: "Dekompozice relačních schémat a normalizace", s: "Normalizace odstraňuje anomálie dekompozicí relace na menší. Dekompozice má být bezeztrátová (průnik atributů je nadklíčem jedné části – Heathova věta) a má zachovat závislosti. Algoritmus syntézy vede do 3NF se zachováním závislostí, algoritmus dekompozice do BCNF." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "SQL, transakce a zpracování dotazů",
+  codes: ["PB154"],
+  opener: "SQL je deklarativní jazyk pro práci s relačními databázemi: dotazování (SELECT), úpravy dat (INSERT, UPDATE, DELETE) i definici struktury a integritních omezení. Transakce je nedělitelná posloupnost operací splňující vlastnosti ACID — atomicitu, konzistenci, izolaci a trvanlivost. Výkon dotazů zásadně ovlivňují indexy (typicky B-stromy), které urychlují vyhledávání z lineárního na logaritmický čas.",
+  math: ["ACID: Atomicity, Consistency, Isolation, Durability","Index (B-strom): vyhledání O(log n) místo O(n)","Selekce σ, projekce π, spojení ⋈ (relační algebra)"],
+  subs: [
+    { t: "Syntaxe a sémantika příkazů", s: "SQL je deklarativní jazyk popisující, jaká data chceme, ne jak je získat. Dotaz SELECT má klauzule FROM, WHERE, GROUP BY, HAVING a ORDER BY a logicky se vyhodnocují v jiném pořadí, než jsou zapsány. NULL se chová zvláštně – porovnání s ním dává UNKNOWN, proto se testuje přes IS NULL." },
+    { t: "Příkazy pro dotazování a aktualizaci dat", s: "SELECT čte data, INSERT vkládá, UPDATE mění a DELETE maže řádky; u UPDATE a DELETE je klauzule WHERE zásadní, jinak se operace provede nad celou tabulkou. JOIN spojuje tabulky v různých variantách. Pokročilými prostředky jsou CTE (WITH) a window funkce." },
+    { t: "Agregační funkce", s: "Agregační funkce COUNT, SUM, AVG, MIN a MAX redukují více řádků na jednu hodnotu a ignorují NULL. GROUP BY seskupí řádky podle hodnoty atributu, HAVING pak filtruje hotové skupiny – na rozdíl od WHERE, jež filtruje řádky před agregací. Pokročilé jsou ROLLUP a CUBE pro OLAP." },
+    { t: "Triggery a uložené procedury", s: "Trigger je kód automaticky vyvolaný při události INSERT, UPDATE nebo DELETE na tabulce; BEFORE může operaci změnit či zabránit, AFTER reaguje po zápisu. Slouží k vynucení omezení, auditu nebo kaskádním akcím. Uložená procedura je pojmenovaný blok kódu na serveru, který snižuje síťový overhead a centralizuje logiku." },
+    { t: "Definice dat a integritní omezení", s: "DDL příkazy CREATE, ALTER a DROP definují a mění strukturu tabulek. Integritní omezení PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL a CHECK vynucuje databáze při každé změně. Referenční integritu řídí pravidla ON DELETE (CASCADE, SET NULL, RESTRICT); indexy urychlují čtení za cenu pomalejších zápisů." },
+    { t: "Transakční zpracování a jeho vlastnosti", s: "Transakce je nedělitelná jednotka práce ohraničená BEGIN a COMMIT či ROLLBACK, splňující vlastnosti ACID. Atomicitu zajišťuje commit/rollback, izolaci zámky nebo MVCC, trvanlivost transakční log. Izolační úrovně řeší jevy jako dirty read; správnost souběhu zaručuje sériovatelnost, typicky dvoufázovým zamykáním." },
+    { t: "Základní principy vyhodnocování dotazů", s: "Optimalizátor přeloží dotaz, algebraicky ho přetransformuje a podle statistik vybere nejlevnější prováděcí plán. Index (B+strom) urychlí vyhledání na O(log n) i rozsahové dotazy, ale pro málo selektivní podmínky může být rychlejší sekvenční sken. JOIN se realizuje algoritmy nested loop, hash nebo merge join; plán ukáže EXPLAIN." }
+  ]
+});
+TOPICS.push(
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Operační systémy",
+  codes: ["PB152"],
+  opener: "Operační systém je software spravující hardware a poskytující službu aplikacím přes systémová volání. Jeho jádro řídí procesy a vlákna (plánování CPU), virtuální paměť pomocí stránkových tabulek a izolaci pomocí uživatelského a privilegovaného režimu. Mezi klíčové problémy patří souběžnost a uváznutí (deadlock), jemuž lze zabránit jednotným pořadím získávání zámků.",
+  math: ["Deadlock vzniká při současném splnění 4 podmínek:","vzájemné vyloučení · drž a čekej · nepreemptivnost · cyklické čekání","Virtuální adresa = (číslo stránky, offset) → fyzický rámec"],
+  subs: [
+    { t: "Architektura operačního systému a jádra", s: "Operační systém abstrahuje hardware a poskytuje aplikacím jednotné rozhraní. Monolitické jádro drží všechny služby v privilegovaném prostoru (vysoký výkon, nižší izolace), mikrojádro ponechává v jádře jen minimum a služby běží jako oddělené procesy (lepší izolace, vyšší overhead). Windows a macOS používají hybridní jádro." },
+    { t: "Základní režimy procesoru", s: "Procesor pracuje v uživatelském a privilegovaném (kernel) režimu; v uživatelském jsou privilegované instrukce a přímý přístup k hardwaru zakázány. Přechod do jádra spouští systémové volání, hardwarové přerušení nebo výjimka procesoru. Toto oddělení chrání paměť, soubory i hardware před libovolnou aplikací." },
+    { t: "Programovací rozhraní a knihovny", s: "Systémové volání je řízený přechod do jádra s žádostí o jeho službu; POSIX standardizuje jejich sadu pro unixové systémy. Standardní knihovna (libc) zabaluje volání do přenositelných funkcí, například printf používá write. Dynamické knihovny se sdílejí mezi procesy a šetří paměť." },
+    { t: "Uživatel, přístupová práva, virtualizace", s: "Každý proces běží pod uživatelem (UID) a skupinou (GID), root má neomezená práva; unixová práva tvoří trojice rwx pro vlastníka, skupinu a ostatní. MAC modely jako SELinux vynucují politiku bez ohledu na vlastníka. Virtuální stroje virtualizují celý hardware, kontejnery sdílejí jádro a izolují přes namespaces a cgroups." },
+    { t: "Virtuální paměť, proces a stránkové tabulky", s: "Virtuální paměť dává každému procesu vlastní izolovaný adresní prostor, mapovaný přes MMU na fyzickou paměť po stránkách. Stránková tabulka překládá číslo virtuální stránky na fyzický rámec, TLB tento překlad cachuje. Page fault při přístupu na chybějící stránku ji načte z disku; copy-on-write zefektivňuje fork." },
+    { t: "Vlákno, plánování vláken a procesů", s: "Proces má vlastní adresní prostor, vlákna uvnitř něj sdílejí paměť, ale mají vlastní zásobník – přepnutí kontextu je tak levnější. Plánovač rozhoduje, které vlákno dostane CPU a na jak dlouho. Mezi algoritmy patří FCFS, SJF, round-robin s časovým kvantem a Linuxový CFS." },
+    { t: "Souběžnost, uváznutí, přidělování zdrojů", s: "Souběžný přístup ke sdíleným datům vyžaduje synchronizaci kritické sekce mutexem, semaforem nebo podmínkovou proměnnou. Uváznutí (deadlock) nastane při současném splnění čtyř Coffmanových podmínek a předejde se mu jednotným pořadím zamykání. Hrozí i livelock a hladovění (starvation)." },
+    { t: "Vznik procesu v POSIX a copy-on-write", s: "Volání fork vytvoří kopii procesu (vrací 0 v potomkovi a PID v rodiči), exec nahradí jeho program. Copy-on-write nechá stránky sdílené read-only a zkopíruje je až při zápisu, takže fork je rychlý. Skončí-li potomek bez wait, vznikne zombie; skončí-li rodič dřív, potomka adoptuje init." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Souborové systémy",
+  codes: ["PB152"],
+  opener: "Souborový systém organizuje data na blokovém zařízení do souborů a adresářů a spravuje jejich metadata. Adresář mapuje jména na i-uzly, které drží metadata a odkazy na datové bloky; alokace bloků může být souvislá, zřetězená nebo indexová. Mezi důležitá témata patří fragmentace, RAID pro spolehlivost a výkon a šifrování disku pro ochranu dat v klidu.",
+  math: ["Soubor velikosti s při bloku b zabere ⌈s / b⌉ bloků","Vnitřní fragmentace = nevyužité místo v posledním bloku","RAID 1 zrcadlí (přežije 1 výpadek), RAID 5: kapacita N−1 disků"],
+  subs: [
+    { t: "Blokové zařízení", s: "Blokové zařízení zpřístupňuje úložiště jako lineární pole bloků pevné velikosti adresovaných číslem (LBA), typicky 512 B nebo 4 KiB. Liší se rozhraním a latencí: HDD má pomalý náhodný přístup, SSD a NVMe jsou výrazně rychlejší. Kernel k němu přistupuje přes blokovou vrstvu s vyrovnávací page cache." },
+    { t: "Bloková vrstva a I/O plánovač", s: "Bloková vrstva standardizuje rozhraní k různému hardwaru a poskytuje frontu požadavků. I/O plánovač ji reorganizuje, aby u rotačních disků minimalizoval pohyb hlavy (algoritmus výtahu SCAN). Pro SSD bez pohyblivých částí se pořadí neřeší (noop) a využívá se paralelismus front." },
+    { t: "RAID", s: "RAID kombinuje více disků do jednoho logického svazku pro výkon, kapacitu nebo odolnost. RAID 0 jen prokládá data bez redundance, RAID 1 zrcadlí, RAID 5 přidá paritu a přežije výpadek jednoho disku, RAID 6 dvou. RAID 10 kombinuje zrcadlení a prokládání pro výkon i redundanci." },
+    { t: "Šifrování disku", s: "Šifrování celého disku transparentně šifruje všechna data, takže bez klíče jsou nečitelná – chrání data v klidu při ztrátě či krádeži. Používá typicky AES v módu XTS, klíč se odvozuje z hesla a může být vázán na TPM. Po odemčení vidí data celý systém, takže nechrání před aktivním malwarem." },
+    { t: "Obyčejné soubory", s: "Soubor je pojmenovaná sekvence bajtů bez inherentní struktury, kterou OS neinterpretuje. Metadata (vlastník, práva, časy, velikost, počet linků) jsou uložena v i-uzlu, nikoli v obsahu. Hard link je další jméno téhož i-uzlu, symlink je soubor obsahující cestu k cíli." },
+    { t: "Alokace volného místa a fragmentace", s: "Souborový systém eviduje volné bloky (typicky bitmapou) a přiděluje je souborům. Souvislá alokace je rychlá, ale trpí vnější fragmentací; zřetězená umožní libovolnou velikost, ale má pomalý náhodný přístup; indexová (i-uzel) podporuje velké soubory s rychlým náhodným přístupem. Vnitřní fragmentace plýtvá místem v posledním bloku." },
+    { t: "Adresářová struktura a její reprezentace na disku", s: "Adresář je speciální soubor mapující jména na čísla i-uzlů a tvoří hierarchický strom s kořenem /. Otevření souboru podle cesty znamená postupné procházení adresářů a čtení odpovídajících i-uzlů. Moderní souborové systémy (ext4, XFS) používají uvnitř adresáře B-strom či hash pro rychlé hledání jména." },
+    { t: "Vstup a výstup mapovaný do paměti", s: "Volání mmap namapuje obsah souboru do virtuálního adresního prostoru, takže se k němu přistupuje běžným čtením a zápisem ukazatele. Stránky se načítají na vyžádání při page faultu (demand paging). Výhodou je nulové kopírování a sdílení stránek mezi procesy; využívá se i pro sdílenou paměť a načítání spustitelných souborů." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Sítě",
+  codes: ["PB156"],
+  opener: "Počítačové sítě umožňují komunikaci mezi zařízeními a jsou organizovány do vrstev — referenční model ISO/OSI má 7 vrstev, praktický model TCP/IP čtyři. Každá vrstva poskytuje službu vyšší vrstvě a přidává vlastní hlavičku (zapouzdření); adresace probíhá na různých úrovních (MAC, IP, port). Transportní vrstva nabízí spolehlivé TCP s třícestným handshakem, nebo rychlé nespolehlivé UDP.",
+  math: ["Zapouzdření: aplikace → segment (TCP) → paket (IP) → rámec (linka)","TCP handshake: SYN → SYN-ACK → ACK","Adresy: MAC (linková) · IP (síťová) · port (transportní)"],
+  subs: [
+    { t: "Modely vrstev (ISO/OSI, TCP/IP)", s: "Síťová komunikace je rozdělena do vrstev: model ISO/OSI má 7 vrstev, praktický TCP/IP čtyři. Každá vrstva poskytuje službu vyšší a logicky komunikuje s odpovídající vrstvou protějšku. Při odesílání data sestupují vrstvami a každá přidá vlastní hlavičku (zapouzdření)." },
+    { t: "Funkcionalita a součinnost vrstev, adresace", s: "Každá vrstva plní svou skupinu úkolů a se sousedními komunikuje přes standardizované rozhraní. Adresace probíhá na různých úrovních: MAC adresa na linkové, IP adresa na síťové a port na transportní vrstvě. Spojení jednoznačně identifikuje pětice protokol a dvojice IP a port; MTU omezuje velikost rámce." },
+    { t: "Fyzická vrstva, signály a jejich kódování", s: "Fyzická vrstva přenáší bity jako fyzikální signály – napětí, světlo nebo rádiové vlny. Kódování jako NRZ nebo Manchester převádí bity na signál a řeší synchronizaci. Shannonova kapacita C = B·log₂(1+SNR) udává teoretický limit kanálu, modulace QAM kóduje více bitů na symbol." },
+    { t: "Řízení přístupu k médiu", s: "MAC vrstva řeší, kdo a kdy smí vysílat na sdíleném médiu. Klasický Ethernet používá CSMA/CD s detekcí kolizí, Wi-Fi CSMA/CA s vyhýbáním kolizím, protože je nedokáže detekovat. Přepínač segmentuje síť a odstraňuje kolizní domény tím, že každý port má dedikované médium." },
+    { t: "Propojování počítačových sítí", s: "Propojovací zařízení pracují na různých vrstvách: opakovač zesiluje signál (L1), přepínač přeposílá rámce podle MAC adres (L2), směrovač pakety podle IP adres (L3). Přepínač se učí mapování MAC na port, směrovač používá směrovací tabulku. NAT umožní sdílet jednu veřejnou IP, firewall filtruje provoz." },
+    { t: "Síťové protokoly, přepínání a směrování, multicast", s: "IP je bezespojový, nespolehlivý protokol doručující pakety best-effort; pole TTL brání nekonečným smyčkám. Směrovače předávají pakety podle směrovací tabulky pravidlem nejdelšího prefixu, tabulky plní protokoly RIP, OSPF a BGP. Unicast míří jednomu příjemci, broadcast všem v síti a multicast přihlášené skupině." },
+    { t: "Zajištěný přenos, sestavení a ukončení spojení", s: "TCP zajišťuje spolehlivý a uspořádaný přenos číslováním bajtů a potvrzováním (ACK). Spojení navazuje třícestným handshakem (SYN, SYN-ACK, ACK) a ukončuje čtyřcestným. Řízení toku oknem příjemce brání přeplnění bufferu, řízení zahlcení (slow start) přizpůsobuje rychlost stavu sítě." },
+    { t: "Transportní protokoly", s: "TCP je spojově orientovaný, spolehlivý a uspořádaný – vhodný pro web, e-mail nebo SSH. UDP je bezespojový, nespolehlivý a s minimální režií – vhodný pro VoIP, DNS, hry a streaming, kde je nízká latence důležitější než úplnost. QUIC nad UDP přidává spolehlivost a šifrování a je základem HTTP/3." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Síťové aplikace a bezpečnost",
+  codes: ["PB156"],
+  opener: "Tento okruh pokrývá aplikační protokoly (HTTP, SMTP/IMAP, FTP, DNS), kvalitu služby (QoS) a zabezpečení komunikace. DNS překládá doménová jména na IP adresy a HTTPS zajišťuje důvěrnost, integritu i autentizaci serveru pomocí TLS a certifikátů. Zabezpečení lze řešit na různých vrstvách — TLS na transportní (HTTPS), IPsec na síťové (VPN).",
+  math: ["HTTP/HTTPS port 80 / 443 · DNS 53 · SMTP 25 · IMAP 143/993","QoS parametry: propustnost · zpoždění · jitter · ztrátovost","HTTPS = HTTP nad TLS (důvěrnost + integrita + autentizace serveru)"],
+  subs: [
+    { t: "Základní aplikační protokoly (pošta, přenos souborů, web, jmenná služba)", s: "DNS překládá doménová jména na IP adresy hierarchickou rezolucí s cachováním. HTTP je bezstavový protokol webu s metodami a stavovými kódy; HTTPS je jeho šifrovaná varianta přes TLS. E-mail využívá SMTP pro odesílání a IMAP nebo POP3 pro příjem, soubory přenáší SFTP a vzdálený přístup zajišťuje SSH." },
+    { t: "Principy popisu a zajištění kvality služby", s: "QoS popisuje záruky sítě čtyřmi parametry: propustnost, zpoždění, jitter a ztrátovost. Výchozí model internetu je best-effort bez záruk, QoS provoz klasifikuje a prioritizuje. IntServ rezervuje zdroje pro každý tok, DiffServ rozděluje provoz do tříd a škáluje lépe; záruky stvrzuje SLA." },
+    { t: "Použití pro multimédia", s: "Reálně-časové přenosy jako VoIP a videokonference vyžadují nízkou latenci a jitter, ale tolerují mírnou ztrátovost, proto používají UDP s protokolem RTP. Playout buffer ukládá pakety o desítky až stovky ms dopředu a vyhlazuje jitter za cenu zpoždění. Adaptivní bitrate streaming volí kvalitu podle aktuální propustnosti." },
+    { t: "Zabezpečení síťové komunikace, autentizace a šifrování", s: "Cíli zabezpečení jsou důvěrnost, integrita, autentizace a nepopiratelnost. TLS zabezpečuje spojení: při handshaku se přes Diffie–Hellmanovu výměnu ustaví symetrický klíč (forward secrecy) a certifikátem se ověří server. Data pak chrání autentizované šifrování AES-GCM nebo ChaCha20-Poly1305; důvěru v certifikáty zajišťuje PKI." },
+    { t: "Zabezpečení na jednotlivých protokolových vrstvách", s: "Zabezpečení lze řešit na různých vrstvách: WPA3 a 802.1X na linkové, IPsec na síťové (VPN), TLS na transportní a S/MIME nebo Signal na aplikační. Nižší vrstva chrání více protokolů bez zásahu do aplikace, vyšší umožňuje end-to-end ochranu, kde server nevidí obsah. IPsec má transport a tunnel mód a komponenty AH a ESP." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Základy informační bezpečnosti",
+  codes: ["PV080"],
+  opener: "Informační bezpečnost chrání aktiva z hlediska tří základních vlastností — důvěrnosti, integrity a dostupnosti (triáda CIA), často doplněných o nepopiratelnost. Opírá se o kryptografická primitiva: symetrické šifry (AES), asymetrické šifry (RSA), hašovací funkce (SHA-256) a digitální podpisy. Praktická bezpečnost stojí na řízení rizik, auditu a standardizovaném hodnocení.",
+  math: ["Triáda CIA: důvěrnost · integrita · dostupnost","Symetrická šifra: jeden sdílený klíč; asymetrická: pár (veřejný, soukromý)","Riziko ≈ pravděpodobnost × dopad"],
+  subs: [
+    { t: "Základní bezpečnostní funkce – důvěrnost, integrita, dostupnost, nepopiratelnost", s: "Triáda CIA je základní rámec: důvěrnost chrání data před neoprávněným čtením, integrita před neoprávněnou změnou a dostupnost před výpadkem. Doplňuje ji nepopiratelnost, kterou zajišťuje digitální podpis. Každé vlastnosti odpovídají jiná opatření – šifrování, hashe a podpisy, redundance." },
+    { t: "Kryptografická primitiva", s: "Symetrické šifry (AES) používají jeden sdílený klíč a jsou rychlé, asymetrické (RSA, ECC) pár klíčů a řeší výměnu klíče a podpisy. Hašovací funkce (SHA-256) vytvoří jednosměrný otisk pro kontrolu integrity. Digitální podpis kombinuje hash se soukromým klíčem, Diffie–Hellman umožní ustavit sdílené tajemství bez jeho přenosu." },
+    { t: "Kryptografické protokoly", s: "Kryptografický protokol je přesná posloupnost zpráv, která pomocí primitiv dosáhne bezpečnostního cíle i proti aktivnímu útočníkovi. Příkladem je TLS pro zabezpečení spojení, OAuth pro delegovanou autorizaci nebo Kerberos pro jednotné přihlášení. Návrh musí bránit útokům jako replay, MITM a downgrade." },
+    { t: "Řízení rizik", s: "Řízení rizik systematicky identifikuje aktiva, hrozby a zranitelnosti a volí přiměřená protiopatření, přičemž riziko je úměrné pravděpodobnosti a dopadu. Na riziko lze reagovat snížením, přenesením (pojištění), vyhnutím nebo akceptací. Proces formalizuje ISMS podle normy ISO/IEC 27001." },
+    { t: "Audit, bezpečnostní operace, standardy", s: "Audit je nezávislé ověření, zda jsou opatření účinná a v souladu s politikami a normami. Bezpečnostní operace (SOC, SIEM) průběžně monitorují logy, detekují incidenty a řeší je definovaným postupem. Rámec dávají standardy ISO/IEC 27001 a 27002 a NIST; obnovu po havárii řídí metriky RPO a RTO." },
+    { t: "Hodnocení bezpečnosti", s: "Hodnocení bezpečnosti posuzuje, nakolik produkt skutečně splňuje deklarované vlastnosti. Standard Common Criteria definuje požadavky a vydává úroveň záruky EAL 1–7. Závažnost zranitelností boduje CVSS 0–10, veřejnou evidenci vede databáze CVE; testování zahrnuje SAST, DAST a fuzzing." }
+  ]
+},
+{
+  cat: "Programové, výpočetní a informační systémy",
+  title: "Informační bezpečnost",
+  codes: ["PV080"],
+  opener: "Tento okruh se zaměřuje na praktickou ochranu systémů: řízení identity a přístupu, ochranu soukromí, obranu před síťovými útoky a bezpečný vývoj softwaru. Klíčovými principy jsou vícefaktorová autentizace, princip nejmenších oprávnění a minimalizace dat. Typické zranitelnosti jako SQL injection se řeší u příčiny — například parametrizovanými dotazy, nikoli pouhým filtrováním vstupu.",
+  math: ["Autentizace (kdo jsi) vs. autorizace (co smíš)","MFA = kombinace ≥ 2 faktorů (znalost · vlastnictví · biometrie)","Princip nejmenších oprávnění: přiděl jen nezbytné minimum práv"],
+  subs: [
+    { t: "Řízení identity a přístupu", s: "IAM zahrnuje identifikaci, autentizaci a autorizaci. Autentizace stojí na faktorech znalosti, vlastnictví a inherence (biometrie), jejichž kombinaci tvoří MFA. Přístup řídí modely DAC, MAC, RBAC a ABAC a uplatňuje se princip nejmenších oprávnění." },
+    { t: "Ochrana soukromí – koncepty a metody", s: "Soukromí je právo kontrolovat informace o sobě; osobní data v EU chrání GDPR principy jako účelové omezení a minimalizace dat. Anonymizace nevratně odstraní identitu, pseudonymizace ji nahradí tokenem (data zůstávají osobní). Silnou matematickou záruku dává diferenciální soukromí přidáním kalibrovaného šumu." },
+    { t: "Síťové útoky", s: "Odposlech narušuje důvěrnost, aktivní man-in-the-middle i integritu, DDoS dostupnost zahlcením cíle. Mezi webové útoky patří SQL injection, XSS a CSRF. Obrana odpovídá typu útoku – šifrování proti odposlechu, parametrizované dotazy proti injection, rate limiting a CDN proti DDoS." },
+    { t: "Bezpečné programování a vývoj SW", s: "Bezpečné programování předchází zranitelnostem už při návrhu a implementaci, k čemuž slouží například přehled OWASP Top 10. Klíčové praktiky jsou validace vstupů, výstupní escapování proti XSS, parametrizované dotazy proti SQL injection a kontrola mezí polí. Zranitelnost se opravuje u příčiny, ne filtrováním jednoho útoku; hesla se ukládají hashovaná (bcrypt)." },
+    { t: "Použitelná bezpečnost", s: "Použitelná bezpečnost zkoumá souhru opatření a lidského chování – příliš složitá opatření uživatelé obcházejí, a bezpečnost tak klesá. Proto se doporučují správci hesel a důraz na délku hesla místo časté nucené změny. Cílem je bezpečné výchozí nastavení a minimální penalizace pohodlí, protože phishing cílí na lidský faktor." }
+  ]
+});
 
+</script>
+<script>
 const CAT_LABELS = {
   "Matematika a teoretická informatika": "Matematika a TI",
   "Programové, výpočetní a informační systémy": "Programové systémy"
@@ -526,6 +705,34 @@ let activeFilter = "Vše";
 let query = "";
 
 const categories = [...new Set(TOPICS.map(t => t.cat))];
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function highlight(text, q) {
+  const safe = escapeHtml(text);
+  if (!q) return safe;
+  try {
+    const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+    return safe.replace(re, "<mark>$1</mark>");
+  } catch {
+    return safe;
+  }
+}
+
+function subMatches(sub, q) {
+  return (sub.t + " " + sub.s).toLowerCase().includes(q);
+}
+
+function topicMatches(t, q) {
+  if (!q) return true;
+  const hay = (t.title + " " + t.opener + " " +
+    (t.math ? t.math.join(" ") : "") + " " +
+    t.codes.join(" ") + " " +
+    (t.subs || []).map(s => s.t + " " + s.s).join(" ")).toLowerCase();
+  return hay.includes(q);
+}
 
 function renderFilters() {
   filtersEl.innerHTML = "";
@@ -545,34 +752,10 @@ function renderFilters() {
   });
 }
 
-function escapeHtml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function highlight(text, q) {
-  const safe = escapeHtml(text);
-  if (!q) return safe;
-  // case-insensitive highlight of every occurrence of the query
-  try {
-    const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
-    return safe.replace(re, "<mark>$1</mark>");
-  } catch {
-    return safe;
-  }
-}
-
-function matches(topic, q) {
-  if (!q) return true;
-  const hay = (topic.title + " " + topic.opener + " " +
-    (topic.math ? topic.math.join(" ") : "") + " " +
-    topic.codes.join(" ")).toLowerCase();
-  return hay.includes(q.toLowerCase());
-}
-
 function render() {
-  const q = query.trim();
+  const q = query.trim().toLowerCase();
   const items = TOPICS.filter(t =>
-    (activeFilter === "Vše" || t.cat === activeFilter) && matches(t, q));
+    (activeFilter === "Vše" || t.cat === activeFilter) && topicMatches(t, q));
 
   countEl.textContent = items.length + " z " + TOPICS.length + " okruhů";
 
@@ -590,6 +773,21 @@ function render() {
       t.math.map(m => '<li>' + highlight(m, q) + '</li>').join("") +
       '</ul></div>'
     ) : "";
+    const subs = (t.subs || []).map(s => {
+      const open = q && subMatches(s, q) ? " open" : "";
+      return '<details class="sub"' + open + '>' +
+        '<summary>' + highlight(s.t, q) + '</summary>' +
+        '<p class="sub-body">' + highlight(s.s, q) + '</p>' +
+        '</details>';
+    }).join("");
+    const subsBlock = (t.subs && t.subs.length) ? (
+      '<div class="subs">' +
+        '<div class="subs-head">' +
+          '<p class="section-label">Dílčí pojmy · ' + t.subs.length + '</p>' +
+          '<button class="subs-toggle" type="button">Rozbalit pojmy</button>' +
+        '</div>' + subs +
+      '</div>'
+    ) : "";
     return (
       '<article class="card">' +
         '<div class="top">' +
@@ -598,12 +796,22 @@ function render() {
         '</div>' +
         '<h2>' + highlight(t.title, q) + '</h2>' +
         '<p class="opener">' + highlight(t.opener, q) + '</p>' +
-        math +
+        math + subsBlock +
         '<div class="codes">' + codes + '</div>' +
       '</article>'
     );
   }).join("");
 }
+
+listEl.addEventListener("click", e => {
+  const btn = e.target.closest(".subs-toggle");
+  if (!btn) return;
+  const card = btn.closest(".card");
+  const ds = [...card.querySelectorAll("details.sub")];
+  const anyOpen = ds.some(d => d.open);
+  ds.forEach(d => d.open = !anyOpen);
+  btn.textContent = anyOpen ? "Rozbalit pojmy" : "Sbalit pojmy";
+});
 
 searchEl.addEventListener("input", () => {
   query = searchEl.value;
