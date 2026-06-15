@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1424">
+<title>První věty ke státnicím</title>
+<style>
+  :root {
+    --bg: #0f1424;
+    --card: #1a2138;
+    --card-2: #232c49;
+    --ink: #eef1f8;
+    --muted: #9aa4c4;
+    --accent: #6c8cff;
+    --accent-2: #45d0a8;
+    --line: #2c3556;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: max(16px, env(safe-area-inset-top)) 16px
+             calc(40px + env(safe-area-inset-bottom)) 16px;
+  }
+
+  header { text-align: center; margin: 14px 0 18px; }
+  header h1 { font-size: 1.35rem; margin: 0 0 6px; letter-spacing: -0.01em; }
+  header p { margin: 0 auto; max-width: 56ch; color: var(--muted); font-size: 0.9rem; }
+
+  .search {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.95rem;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .search::placeholder { color: var(--muted); }
+  .search:focus { outline: none; border-color: var(--accent); }
+
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center; margin-bottom: 18px;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .count { text-align: center; color: var(--muted); font-size: 0.8rem; margin: 0 0 16px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 18px 20px;
+    margin-bottom: 14px;
+    animation: pop .22s ease;
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .card .top {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .card .cat {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .card .num {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .card h2 { margin: 0 0 12px; font-size: 1.3rem; letter-spacing: -0.02em; }
+
+  .opener {
+    background: var(--card-2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 13px 15px;
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .math {
+    margin: 14px 0 0;
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    padding: 11px 14px;
+    background: rgba(69, 208, 168, .05);
+  }
+  .math .label {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-2);
+    font-weight: 700;
+    margin: 0 0 7px;
+  }
+  .math ul { margin: 0; padding: 0; list-style: none; }
+  .math li {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Cambria Math", serif;
+    font-size: 0.92rem;
+    color: var(--ink);
+    padding: 3px 0;
+    line-height: 1.5;
+  }
+  .math li + li { border-top: 1px solid rgba(44,53,86,.6); }
+
+  .codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    background: var(--card-2);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 3px 8px;
+    border-radius: 7px;
+  }
+
+  .empty { text-align: center; color: var(--muted); padding: 40px 12px; }
+
+  mark { background: rgba(108,140,255,.35); color: inherit; border-radius: 3px; padding: 0 2px; }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .search, .filters, .count, .nav { display: none !important; }
+    .card { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+    .opener { background: #f3f3f3; }
+    .math { background: #fafafa; }
+  }
+
+  .nav { text-align: center; margin: 2px 0 18px; }
+  .nav a { color: var(--accent); text-decoration: none; font-size: 0.82rem; }
+  .nav a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎤 První věty ke státnicím</h1>
+    <p>Úvodní věty (max. 3) ke každému okruhu — to, čím začneš odpověď před komisí. Kde to dává smysl, je přidaná i matematická definice.</p>
+  </header>
+
+  <div class="nav"><a href="index.html">← Náhodné téma (procvičování)</a></div>
+
+  <input type="search" class="search" id="search" placeholder="Hledat okruh nebo pojem…" autocomplete="off">
+
+  <div class="filters" id="filters"></div>
+  <p class="count" id="count"></p>
+
+  <main id="list"></main>
+</div>
+
+<script>
+const TOPICS = [
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Lineární algebra",
+    codes: ["MB151"],
+    opener: "Lineární algebra je oblast matematiky studující vektory, vektorové prostory a lineární zobrazení mezi nimi. Jejím základním objektem je vektor jako uspořádaná n-tice čísel a matice, která zároveň reprezentuje lineární zobrazení a zápis soustavy lineárních rovnic. Centrálními úlohami jsou řešení soustav Gaussovou eliminací, výpočet determinantu a hledání vlastních čísel a vektorů — nástroje klíčové v počítačové grafice, strojovém učení i numerických metodách.",
+    math: [
+      "Lineární zobrazení: T(u+v)=T(u)+T(v), T(αv)=αT(v)",
+      "Vlastní číslo a vektor: A·v = λ·v, v ≠ 0",
+      "Determinant 2×2: det[[a,b],[c,d]] = ad − bc",
+      "Regularita: A⁻¹ existuje ⟺ det(A) ≠ 0"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Základy matematické analýzy",
+    codes: ["IB000", "MB152"],
+    opener: "Matematická analýza studuje spojité veličiny a jejich změny pomocí limitního přechodu. Jejími ústředními pojmy jsou limita, derivace (okamžitá rychlost změny, geometricky sklon tečny) a integrál (akumulace hodnot, geometricky obsah pod grafem), které navzájem propojuje Newtonova–Leibnizova věta. Je matematickým základem modelování spojitých dějů a optimalizačních metod, zejména gradientního sestupu ve strojovém učení.",
+    math: [
+      "Derivace: f′(x₀) = lim_{h→0} (f(x₀+h) − f(x₀)) / h",
+      "Newton–Leibniz: ∫ₐᵇ f(x) dx = F(b) − F(a), kde F′ = f",
+      "Spojitost v a: lim_{x→a} f(x) = f(a)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Kombinatorika a pravděpodobnost",
+    codes: ["IB000", "MB153"],
+    opener: "Kombinatorika je část diskrétní matematiky zabývající se počítáním, výběrem a uspořádáním objektů z konečných množin — permutacemi, variacemi a kombinacemi. Pravděpodobnost na ni navazuje a kvantifikuje očekávatelnost náhodných jevů číslem mezi 0 a 1; u klasické definice jako poměr příznivých výsledků ke všem stejně možným. Klíčovým nástrojem je Bayesova věta, která umožňuje obrátit podmíněnost a je základem naivního bayesovského klasifikátoru.",
+    math: [
+      "Kombinace: C(n,k) = n! / (k!·(n−k)!)",
+      "Variace: V(n,k) = n! / (n−k)!,  permutace: P(n) = n!",
+      "Podmíněná: P(A|B) = P(A∩B) / P(B)",
+      "Bayes: P(B|A) = P(A|B)·P(B) / P(A)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Popisná statistika",
+    codes: ["MB153"],
+    opener: "Popisná statistika přehledně shrnuje a popisuje pozorovaná data, aniž by z nich vyvozovala závěry o celé populaci. K tomu používá míry polohy (průměr, medián, modus), míry variability (rozptyl, směrodatná odchylka) a korelační koeficient pro vztah dvou veličin. Na ni navazuje induktivní statistika, která pomocí bodových a intervalových odhadů usuzuje z výběru na celou populaci.",
+    math: [
+      "Průměr: x̄ = (1/n)·Σ xᵢ",
+      "Rozptyl: σ² = (1/n)·Σ (xᵢ − x̄)²,  odchylka σ = √σ²",
+      "Korelace: r = Cov(X,Y) / (σₓ·σᵧ) ∈ [−1, +1]",
+      "95% interval pro průměr: x̄ ± 1,96·σ/√n"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Elementární teorie čísel",
+    codes: ["MB154"],
+    opener: "Teorie čísel studuje vlastnosti celých čísel, zejména dělitelnost, prvočísla a modulární aritmetiku. Jejím základním nástrojem je Euklidův algoritmus pro výpočet největšího společného dělitele a v rozšířené formě i modulárních inverzí. Tyto poznatky jsou základem moderní kryptografie — například šifra RSA stojí na obtížnosti rozkladu velkého čísla na prvočinitele.",
+    math: [
+      "Kongruence: a ≡ b (mod m) ⟺ m | (a − b)",
+      "Bézout: ∃ x,y ∈ ℤ: a·x + b·y = NSD(a,b)",
+      "Euler: a^φ(m) ≡ 1 (mod m) pro NSD(a,m) = 1",
+      "RSA: n = p·q,  e·d ≡ 1 (mod φ(n))"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Grafy a jejich prohledávání",
+    codes: ["IB000", "IB002"],
+    opener: "Graf je matematická struktura tvořená množinou vrcholů a množinou hran, které je spojují; modeluje vztahy mezi objekty, jako jsou sítě, závislosti či mapy. Grafy mohou být orientované i neorientované, ohodnocené a mít speciální tvary jako strom. Základními algoritmy jsou prohledávání do šířky (BFS) a do hloubky (DFS), z nichž BFS najde nejkratší cestu v neohodnoceném grafu a oba běží v lineárním čase.",
+    math: [
+      "Graf: G = (V, E),  E ⊆ V × V",
+      "Strom: souvislý graf bez cyklů, |E| = |V| − 1",
+      "Princip podání rukou: Σ deg(v) = 2·|E|",
+      "Složitost BFS/DFS: O(|V| + |E|)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Grafové algoritmy",
+    codes: ["IB000", "IB002"],
+    opener: "Grafové algoritmy řeší optimalizační úlohy nad ohodnocenými grafy, kde každá hrana nese váhu, typicky vzdálenost nebo cenu. Mezi klíčové úlohy patří hledání nejkratší cesty (Dijkstrův algoritmus pro nezáporné váhy, Bellman–Ford pro záporné) a minimální kostry (Kruskalův a Primův algoritmus). Tyto algoritmy jsou hladové nebo založené na relaxaci hran a mají široké využití v navigaci a návrhu sítí.",
+    math: [
+      "Nejkratší cesta: minimalizuje Σ vah hran na cestě",
+      "Relaxace: dist[v] = min(dist[v], dist[u] + w(u,v))",
+      "Minimální kostra: strom přes všechny vrcholy, min Σ vah, |V|−1 hran",
+      "Dijkstra s haldou: O((|V|+|E|)·log|V|)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Stromové datové struktury",
+    codes: ["IB002"],
+    opener: "Strom je hierarchická datová struktura s kořenem, vnitřními uzly a listy, kde mezi každými dvěma uzly vede jediná cesta. Vyvážené stromy — binární vyhledávací, červeno-černé a B-stromy — udržují vyhledávání, vkládání i mazání v logaritmickém čase, zatímco halda zajišťuje rychlý přístup k minimu či maximu. Volba stromové struktury je proto klíčová pro efektivitu slovníků, databázových indexů i prioritních front.",
+    math: [
+      "Vyvážený BST: hloubka O(log n)",
+      "Operace search / insert / delete: O(log n), degenerovaný O(n)",
+      "Halda: rodič ≤ potomci (min-halda), přístup k minimu O(1)",
+      "B-strom: vysoký větvící faktor → mělká hloubka (min. diskové čtení)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Návrh algoritmů",
+    codes: ["IB002", "IB015"],
+    opener: "Návrh algoritmů se zabývá systematickými metodami konstrukce efektivních algoritmů, zejména metodou rozděl a panuj, rekurzí a dynamickým programováním. Metoda rozděl a panuj rozdělí problém na menší podproblémy, vyřeší je rekurzivně a výsledky sloučí — příkladem je mergesort se složitostí O(n log n). Správnost rekurzivních algoritmů se dokazuje matematickou indukcí, jejíž struktura přesně odpovídá rekurzi.",
+    math: [
+      "Rekurence mergesortu: T(n) = 2·T(n/2) + O(n) ⟹ O(n log n)",
+      "Dolní mez řazení porovnáváním: Ω(n log n)",
+      "Indukce: báze ↔ ukončovací podmínka, krok ↔ rekurzivní volání"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Funkcionální programování",
+    codes: ["IB015"],
+    opener: "Funkcionální programování je paradigma, v němž se výpočet chápe jako vyhodnocování funkcí bez měnitelného stavu a vedlejších efektů. Stojí na referenční transparentnosti (stejný vstup dává vždy stejný výstup), funkcích vyšších řádů jako map, filter a fold a na líném vyhodnocování. Jeho teoretickým základem je lambda kalkul a výpočet probíhá redukčními kroky až do normálního tvaru.",
+    math: [
+      "β-redukce: (λx. M) N → M[x := N]",
+      "map f [x₁,…,xₙ] = [f x₁, …, f xₙ]",
+      "foldr (⊕) z [x₁,…,xₙ] = x₁ ⊕ (x₂ ⊕ ( … ⊕ z))"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Regulární jazyky",
+    codes: ["IB005"],
+    opener: "Regulární jazyky jsou nejjednodušší třídou Chomského hierarchie (typ 3) a popisují vzory rozpoznatelné konečným automatem s konečnou pamětí. Mají tři ekvivalentní reprezentace: regulární výraz, pravolineární gramatiku a konečný automat (deterministický i nedeterministický). Jsou uzavřené na sjednocení, průnik i doplněk a to, že nějaký jazyk regulární není, se dokazuje pumping lemmatem.",
+    math: [
+      "DKA: M = (Q, Σ, δ, q₀, F),  δ: Q × Σ → Q",
+      "NKA → DKA: podmnožinová konstrukce (až 2^|Q| stavů)",
+      "Příklad neregulárního jazyka: L = {aⁿbⁿ | n ≥ 0}"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Bezkontextové jazyky a jejich reprezentace",
+    codes: ["IB005"],
+    opener: "Bezkontextové jazyky tvoří typ 2 Chomského hierarchie a popisují je bezkontextové gramatiky a zásobníkové automaty, jejichž zásobník dává paměť navíc oproti konečnému automatu. Umožňují popsat vnořené struktury jako párování závorek nebo aritmetické výrazy, a jsou proto základem syntaktické analýzy programovacích jazyků. Jsou uzavřené na sjednocení, nikoli však na průnik.",
+    math: [
+      "Gramatika: G = (N, Σ, P, S),  pravidla A → α, α ∈ (N ∪ Σ)*",
+      "Zásobníkový automat rozpozná L = {aⁿbⁿ | n ≥ 0}",
+      "{aⁿbⁿcⁿ} už bezkontextový není (pumping lemma pro CFL)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Rozhodnutelnost",
+    codes: ["IB107"],
+    opener: "Teorie rozhodnutelnosti zkoumá, které problémy lze vůbec algoritmicky vyřešit. Formálním modelem výpočtu je Turingův stroj a problém je rozhodnutelný, existuje-li algoritmus, který pro každý vstup po konečném čase vydá správnou odpověď ANO/NE. Existují však principiálně neřešitelné problémy — klasickým příkladem je problém zastavení, jehož nerozhodnutelnost se dokazuje diagonalizací.",
+    math: [
+      "Rozhodnutelný: algoritmus vždy skončí se správnou odpovědí",
+      "Částečně rozhodnutelný: skončí na ANO, na NE se může zacyklit",
+      "Problém zastavení (HALT) je nerozhodnutelný (důkaz sporem/diagonalizací)"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Složitost",
+    codes: ["IB107"],
+    opener: "Teorie složitosti měří, kolik času a paměti algoritmus potřebuje v závislosti na velikosti vstupu, a klasifikuje problémy do složitostních tříd. Třída P obsahuje problémy řešitelné v polynomiálním čase, třída NP problémy s polynomiálně ověřitelným řešením; nejtěžší problémy v NP jsou NP-úplné, například SAT. Zda platí P = NP, je nejslavnějším otevřeným problémem informatiky.",
+    math: [
+      "Inkluze tříd: P ⊆ NP ⊆ PSPACE",
+      "NP-úplný = leží v NP a každý problém z NP se naň polynomiálně redukuje",
+      "Cookova–Levinova věta: SAT je NP-úplný"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Principy strojového učení",
+    codes: ["IB031"],
+    opener: "Strojové učení je obor umělé inteligence, v němž se model učí vzory přímo z dat místo explicitního naprogramování pravidel. Rozlišujeme učení s učitelem (na označených datech — klasifikace a regrese), bez učitele (hledání skryté struktury — shlukování) a posilované učení. Klíčovým problémem je zobecnění: model nesmí být přeučený, proto se jeho kvalita měří na oddělených testovacích datech.",
+    math: [
+      "Přeučení: vysoká přesnost na trénovacích, nízká na testovacích datech",
+      "Rozdělení dat: trénovací / validační / testovací (např. 80 / 0 / 20)",
+      "Entropie (rozhodovací strom): H = − Σ pᵢ·log₂ pᵢ"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Metody strojového učení",
+    codes: ["IB031"],
+    opener: "Metody strojového učení jsou konkrétní algoritmy učení modelů z dat. Patří mezi ně lineární regrese metodou nejmenších čtverců, shlukování (hierarchické a k-means) a umělé neuronové sítě. Sítě se učí gradientním sestupem, který iterativně posouvá parametry proti směru gradientu chybové funkce; díky skryté vrstvě zvládne vícevrstvá síť i lineárně neoddělitelné úlohy jako XOR.",
+    math: [
+      "Nejmenší čtverce: minimalizuj Σ (yᵢ − ŷᵢ)²",
+      "Gradientní sestup: w ← w − η·∇L(w)",
+      "Neuron: y = f(Σ wᵢxᵢ + b),  f je aktivační funkce"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Umělá inteligence",
+    codes: ["PB016"],
+    opener: "Umělá inteligence se zabývá tvorbou systémů řešících úlohy, které u člověka vyžadují inteligenci. Mezi její klasické metody patří prohledávání stavového prostoru — neinformované (BFS, DFS) i heuristické (algoritmus A*) — řešení problémů s omezujícími podmínkami a herní strategie. U dvouhráčových her s úplnou informací se používá algoritmus minimax s alfa-beta ořezáváním.",
+    math: [
+      "A*: rozvíjí stav s nejmenším f(n) = g(n) + h(n)",
+      "Přípustná heuristika: h(n) ≤ skutečná zbývající cena ⟹ A* je optimální",
+      "Minimax: MAX volí maximum, MIN minimum z hodnot potomků"
+    ]
+  },
+  {
+    cat: "Matematika a teoretická informatika",
+    title: "Matematická logika",
+    codes: ["IB000", "PB016"],
+    opener: "Matematická logika formálně studuje pravdivost, vyplývání a dokazatelnost tvrzení. Výroková logika pracuje s výroky spojenými logickými spojkami, predikátová logika přidává kvantifikátory a predikáty pro vyjadřování o objektech. Klíčové jsou pojmy splnitelnost a tautologie a vztah mezi dokazatelností (syntaxí) a pravdivostí (sémantikou), který propojují věty o korektnosti a úplnosti.",
+    math: [
+      "Tautologie: pravdivá při každém ohodnocení;  A → B ≡ ¬A ∨ B",
+      "Korektnost: dokazatelné ⟹ pravdivé",
+      "Úplnost: pravdivé ⟹ dokazatelné",
+      "Rezoluce: z {A, B} a {¬A} plyne {B}; prázdná klauzule = spor"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Strukturování a řízení běhu programu",
+    codes: ["PB006"],
+    opener: "Tento okruh se zabývá organizací kódu pomocí podprogramů, rozsahů platnosti jmen, předávání parametrů, výjimek a principů objektově orientovaného programování. OOP sdružuje data a chování do objektů a stojí na čtyřech pilířích: zapouzdření, dědičnost, polymorfismus a abstrakce. Tyto principy zvyšují znovupoužitelnost, čitelnost a udržovatelnost kódu.",
+    math: null
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Principy nízkoúrovňového programování",
+    codes: ["PB071", "PB111"],
+    opener: "Nízkoúrovňové programování se zabývá přímou prací s pamětí a ukazateli, typicky v jazyce C. Paměť programu se dělí na zásobník (lokální proměnné), haldu (dynamická alokace přes malloc/free) a statická data; ukazatel uchovává adresu a umožňuje nepřímý přístup k hodnotě. Chyby jako únik paměti, zápis mimo meze pole nebo použití uvolněné paměti vedou k pádům i bezpečnostním zranitelnostem.",
+    math: [
+      "Ukazatel: p = &x (adresa),  *p (hodnota na adrese)",
+      "Pole a aritmetika ukazatelů: a[i] ≡ *(a + i)",
+      "Každý malloc musí mít právě jeden odpovídající free"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Architektury",
+    codes: ["PB150", "PB151"],
+    opener: "Počítačová architektura popisuje uspořádání počítače od reprezentace čísel po procesor a paměti. Celá čísla se ukládají ve dvojkové soustavě a záporná v doplňkovém kódu; procesor opakuje cyklus načti–dekóduj–vykonej. Architektury se dělí na RISC (málo jednoduchých instrukcí pevné délky) a CISC (mnoho složitějších), přičemž cache zrychluje přístup k paměti díky lokalitě.",
+    math: [
+      "Doplňkový kód: −x na n bitech = 2ⁿ − x",
+      "Rozsah n-bitového celého se znaménkem: [−2ⁿ⁻¹, 2ⁿ⁻¹ − 1]",
+      "Cyklus instrukce: fetch → decode → execute"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Databáze",
+    codes: ["PB154"],
+    opener: "Databáze je organizovaná kolekce dat; nejrozšířenější je relační model, kde data tvoří tabulky (relace) složené z řádků (n-tic) a sloupců (atributů). Integritu zajišťují klíče — primární klíč jednoznačně identifikuje řádek, cizí klíč odkazuje na jinou tabulku. Návrh kvalitního schématu vede přes funkční závislosti a normální formy (1NF až BCNF), které odstraňují redundanci a aktualizační anomálie.",
+    math: [
+      "Funkční závislost: X → Y (hodnota X určuje hodnotu Y)",
+      "Hierarchie forem: BCNF ⟹ 3NF ⟹ 2NF ⟹ 1NF",
+      "Relace = podmnožina kartézského součinu domén atributů"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "SQL, transakce a zpracování dotazů",
+    codes: ["PB154"],
+    opener: "SQL je deklarativní jazyk pro práci s relačními databázemi: dotazování (SELECT), úpravy dat (INSERT, UPDATE, DELETE) i definici struktury a integritních omezení. Transakce je nedělitelná posloupnost operací splňující vlastnosti ACID — atomicitu, konzistenci, izolaci a trvanlivost. Výkon dotazů zásadně ovlivňují indexy (typicky B-stromy), které urychlují vyhledávání z lineárního na logaritmický čas.",
+    math: [
+      "ACID: Atomicity, Consistency, Isolation, Durability",
+      "Index (B-strom): vyhledání O(log n) místo O(n)",
+      "Selekce σ, projekce π, spojení ⋈ (relační algebra)"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Operační systémy",
+    codes: ["PB152"],
+    opener: "Operační systém je software spravující hardware a poskytující službu aplikacím přes systémová volání. Jeho jádro řídí procesy a vlákna (plánování CPU), virtuální paměť pomocí stránkových tabulek a izolaci pomocí uživatelského a privilegovaného režimu. Mezi klíčové problémy patří souběžnost a uváznutí (deadlock), jemuž lze zabránit jednotným pořadím získávání zámků.",
+    math: [
+      "Deadlock vzniká při současném splnění 4 podmínek:",
+      "vzájemné vyloučení · drž a čekej · nepreemptivnost · cyklické čekání",
+      "Virtuální adresa = (číslo stránky, offset) → fyzický rámec"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Souborové systémy",
+    codes: ["PB152"],
+    opener: "Souborový systém organizuje data na blokovém zařízení do souborů a adresářů a spravuje jejich metadata. Adresář mapuje jména na i-uzly, které drží metadata a odkazy na datové bloky; alokace bloků může být souvislá, zřetězená nebo indexová. Mezi důležitá témata patří fragmentace, RAID pro spolehlivost a výkon a šifrování disku pro ochranu dat v klidu.",
+    math: [
+      "Soubor velikosti s při bloku b zabere ⌈s / b⌉ bloků",
+      "Vnitřní fragmentace = nevyužité místo v posledním bloku",
+      "RAID 1 zrcadlí (přežije 1 výpadek), RAID 5: kapacita N−1 disků"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Sítě",
+    codes: ["PB156"],
+    opener: "Počítačové sítě umožňují komunikaci mezi zařízeními a jsou organizovány do vrstev — referenční model ISO/OSI má 7 vrstev, praktický model TCP/IP čtyři. Každá vrstva poskytuje službu vyšší vrstvě a přidává vlastní hlavičku (zapouzdření); adresace probíhá na různých úrovních (MAC, IP, port). Transportní vrstva nabízí spolehlivé TCP s třícestným handshakem, nebo rychlé nespolehlivé UDP.",
+    math: [
+      "Zapouzdření: aplikace → segment (TCP) → paket (IP) → rámec (linka)",
+      "TCP handshake: SYN → SYN-ACK → ACK",
+      "Adresy: MAC (linková) · IP (síťová) · port (transportní)"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Síťové aplikace a bezpečnost",
+    codes: ["PB156"],
+    opener: "Tento okruh pokrývá aplikační protokoly (HTTP, SMTP/IMAP, FTP, DNS), kvalitu služby (QoS) a zabezpečení komunikace. DNS překládá doménová jména na IP adresy a HTTPS zajišťuje důvěrnost, integritu i autentizaci serveru pomocí TLS a certifikátů. Zabezpečení lze řešit na různých vrstvách — TLS na transportní (HTTPS), IPsec na síťové (VPN).",
+    math: [
+      "HTTP/HTTPS port 80 / 443 · DNS 53 · SMTP 25 · IMAP 143/993",
+      "QoS parametry: propustnost · zpoždění · jitter · ztrátovost",
+      "HTTPS = HTTP nad TLS (důvěrnost + integrita + autentizace serveru)"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Základy informační bezpečnosti",
+    codes: ["PV080"],
+    opener: "Informační bezpečnost chrání aktiva z hlediska tří základních vlastností — důvěrnosti, integrity a dostupnosti (triáda CIA), často doplněných o nepopiratelnost. Opírá se o kryptografická primitiva: symetrické šifry (AES), asymetrické šifry (RSA), hašovací funkce (SHA-256) a digitální podpisy. Praktická bezpečnost stojí na řízení rizik, auditu a standardizovaném hodnocení.",
+    math: [
+      "Triáda CIA: důvěrnost · integrita · dostupnost",
+      "Symetrická šifra: jeden sdílený klíč; asymetrická: pár (veřejný, soukromý)",
+      "Riziko ≈ pravděpodobnost × dopad"
+    ]
+  },
+  {
+    cat: "Programové, výpočetní a informační systémy",
+    title: "Informační bezpečnost",
+    codes: ["PV080"],
+    opener: "Tento okruh se zaměřuje na praktickou ochranu systémů: řízení identity a přístupu, ochranu soukromí, obranu před síťovými útoky a bezpečný vývoj softwaru. Klíčovými principy jsou vícefaktorová autentizace, princip nejmenších oprávnění a minimalizace dat. Typické zranitelnosti jako SQL injection se řeší u příčiny — například parametrizovanými dotazy, nikoli pouhým filtrováním vstupu.",
+    math: [
+      "Autentizace (kdo jsi) vs. autorizace (co smíš)",
+      "MFA = kombinace ≥ 2 faktorů (znalost · vlastnictví · biometrie)",
+      "Princip nejmenších oprávnění: přiděl jen nezbytné minimum práv"
+    ]
+  }
+];
+
+const CAT_LABELS = {
+  "Matematika a teoretická informatika": "Matematika a TI",
+  "Programové, výpočetní a informační systémy": "Programové systémy"
+};
+
+const listEl = document.getElementById("list");
+const filtersEl = document.getElementById("filters");
+const countEl = document.getElementById("count");
+const searchEl = document.getElementById("search");
+
+let activeFilter = "Vše";
+let query = "";
+
+const categories = [...new Set(TOPICS.map(t => t.cat))];
+
+function renderFilters() {
+  filtersEl.innerHTML = "";
+  ["Vše", ...categories].forEach(name => {
+    const btn = document.createElement("button");
+    btn.className = "chip";
+    btn.textContent = CAT_LABELS[name] || name;
+    btn.title = name;
+    btn.setAttribute("aria-pressed", String(name === activeFilter));
+    btn.addEventListener("click", () => {
+      activeFilter = name;
+      [...filtersEl.children].forEach(c =>
+        c.setAttribute("aria-pressed", String(c === btn)));
+      render();
+    });
+    filtersEl.appendChild(btn);
+  });
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function highlight(text, q) {
+  const safe = escapeHtml(text);
+  if (!q) return safe;
+  // case-insensitive highlight of every occurrence of the query
+  try {
+    const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+    return safe.replace(re, "<mark>$1</mark>");
+  } catch {
+    return safe;
+  }
+}
+
+function matches(topic, q) {
+  if (!q) return true;
+  const hay = (topic.title + " " + topic.opener + " " +
+    (topic.math ? topic.math.join(" ") : "") + " " +
+    topic.codes.join(" ")).toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function render() {
+  const q = query.trim();
+  const items = TOPICS.filter(t =>
+    (activeFilter === "Vše" || t.cat === activeFilter) && matches(t, q));
+
+  countEl.textContent = items.length + " z " + TOPICS.length + " okruhů";
+
+  if (items.length === 0) {
+    listEl.innerHTML = '<div class="empty">Žádný okruh neodpovídá hledání.</div>';
+    return;
+  }
+
+  listEl.innerHTML = items.map(t => {
+    const numIndex = TOPICS.indexOf(t) + 1;
+    const codes = t.codes.map(c =>
+      '<span class="code">' + escapeHtml(c) + '</span>').join("");
+    const math = t.math ? (
+      '<div class="math"><p class="label">Matematicky</p><ul>' +
+      t.math.map(m => '<li>' + highlight(m, q) + '</li>').join("") +
+      '</ul></div>'
+    ) : "";
+    return (
+      '<article class="card">' +
+        '<div class="top">' +
+          '<span class="cat">' + escapeHtml(CAT_LABELS[t.cat] || t.cat) + '</span>' +
+          '<span class="num">#' + numIndex + '</span>' +
+        '</div>' +
+        '<h2>' + highlight(t.title, q) + '</h2>' +
+        '<p class="opener">' + highlight(t.opener, q) + '</p>' +
+        math +
+        '<div class="codes">' + codes + '</div>' +
+      '</article>'
+    );
+  }).join("");
+}
+
+searchEl.addEventListener("input", () => {
+  query = searchEl.value;
+  render();
+});
+
+renderFilters();
+render();
+</script>
+</body>
+</html>
