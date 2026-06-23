@@ -412,7 +412,7 @@ window.STUDY_DATASETS.push({
     },
     {
       "cat": "Programové, výpočetní a informační systémy",
-      "title": "Strukturování a řízení běhu programu",
+      "title": "Podprogramy a objektově orientované programování",
       "codes": [
         "PB006"
       ],
@@ -456,7 +456,7 @@ window.STUDY_DATASETS.push({
       "cat": "Programové, výpočetní a informační systémy",
       "title": "Principy nízkoúrovňového programování",
       "codes": [
-        "PB071"
+        "PB111"
       ],
       "def": "Nízkoúrovňové programování je styl programování, který pracuje blízko hardwaru a dává programátorovi přímou kontrolu nad pamětí počítače; typickými jazyky jsou C a C++. Základem je pochopení paměťového modelu programu – jak je paměť běžícího procesu rozdělena na oblasti, zejména zásobník (stack), kam se ukládají lokální proměnné a rámce volání funkcí, a haldu (heap) pro dynamicky alokovaná data. Na rozdíl od jazyků se správcem paměti (garbage collectorem) zde programátor sám explicitně alokuje a uvolňuje paměť na haldě; chyby v tom vedou k únikům paměti, přístupu mimo platná data či dvojímu uvolnění. Klíčovým pojmem je ukazatel (pointer) – proměnná obsahující adresu v paměti – a ukazatelová aritmetika, která umožňuje posouvat se po paměti, zejména při práci s poli. Tato moc je vykoupena rizikem těžko odhalitelných chyb, proto je nedílnou součástí oboru ladění (debugging) – systematické hledání a odstraňování chyb. Nízkoúrovňové programování je nezbytné pro systémový software, vestavěné systémy a výkonově kritické aplikace.",
       "scope": [
@@ -492,9 +492,9 @@ window.STUDY_DATASETS.push({
     },
     {
       "cat": "Programové, výpočetní a informační systémy",
-      "title": "Architektury",
+      "title": "Nízkoúrovňové výpočetní architektury",
       "codes": [
-        "PB150"
+        "PB151"
       ],
       "def": "Architektura počítače popisuje, jak je počítač vnitřně uspořádán a jak na úrovni hardwaru zpracovává data. Začíná u reprezentace informace: počítač pracuje ve dvojkové soustavě, proto je třeba rozumět číselným soustavám a převodům mezi nimi i způsobu, jak se v paměti ukládají celá čísla (například v doplňkovém kódu) a jak se s nimi provádí aritmetika. Data se kódují – rozlišujeme vnitřní a vnější kódy a kódy detekční a opravné, které umožňují odhalit nebo opravit chyby. Hardware je postaven z logických obvodů (kombinačních a sekvenčních) a pamětí, jež mají různé parametry a architekturu. Srdcem počítače je procesor, který vykonává instrukce; jeho činnost lze řídit i mikroprogramově. Na úrovni návrhu instrukční sady se rozlišují přístupy RISC (málo jednoduchých instrukcí) a CISC (mnoho složitějších instrukcí). Pro rychlost je klíčová paměťová hierarchie s vyrovnávacími paměťmi (cache), které zmírňují rozdíl mezi rychlostí procesoru a hlavní paměti.",
       "scope": [
@@ -736,7 +736,7 @@ window.STUDY_DATASETS.push({
     },
     {
       "cat": "Programové, výpočetní a informační systémy",
-      "title": "Síťové aplikace a bezpečnost",
+      "title": "Síťové aplikace a jejich bezpečnost",
       "codes": [
         "PB156"
       ],
@@ -800,7 +800,7 @@ window.STUDY_DATASETS.push({
     },
     {
       "cat": "Programové, výpočetní a informační systémy",
-      "title": "Informační bezpečnost",
+      "title": "Vývoj bezpečných aplikací",
       "codes": [
         "PV080"
       ],
@@ -815,84 +815,12 @@ window.STUDY_DATASETS.push({
           "d": "Ochrana soukromí se zaměřuje na ochranu osobních údajů a na kontrolu jednotlivce nad jejich sběrem a využíváním. Mezi koncepty patří minimalizace dat, účelové omezení, anonymizace a pseudonymizace a princip soukromí už v návrhu (privacy by design). Souvisí i s právní úpravou, například s GDPR."
         },
         {
-          "t": "Síťové útoky",
-          "d": "Síťové útoky cílí na komunikaci a síťové služby – patří sem odposlech, podvržení identity (spoofing), útok typu man-in-the-middle, odepření služby (DoS a DDoS) i útoky na webové aplikace. Liší se cílem (důvěrnost, integrita, dostupnost) i mírou aktivity útočníka. Obrana kombinuje šifrování, filtrování provozu, detekci průniků a správnou konfiguraci."
-        },
-        {
           "t": "Bezpečné programování a vývoj SW",
           "d": "Mnoho zranitelností vzniká už chybami v kódu, například přetečením vyrovnávací paměti nebo SQL injection. Bezpečné programování jim předchází validací vstupů, ošetřením chyb a používáním bezpečných postupů a knihoven. Bezpečnost se zohledňuje v celém životním cyklu vývoje – od návrhu přes implementaci po testování."
         },
         {
           "t": "Použitelná bezpečnost",
           "d": "Použitelná bezpečnost (usable security) zkoumá souhru bezpečnosti a lidského faktoru. Vychází z toho, že příliš složitá nebo nesrozumitelná opatření uživatelé obcházejí, čímž bezpečnost selhává. Cílem je navrhovat bezpečnostní mechanismy tak, aby byly srozumitelné a snadno správně použitelné."
-        }
-      ]
-    },
-    {
-      "cat": "Programové, výpočetní a informační systémy",
-      "title": "Aplikované informační systémy",
-      "codes": [
-        "PV028"
-      ],
-      "def": "Aplikovaný informační systém (AIS) je informační systém nasazený v konkrétní organizační doméně, kde podporuje sběr, uchování, zpracování a sdílení dat pro řízení procesů a rozhodování. Nejde jen o software: AIS zahrnuje data, uživatele, procesy, pravidla, infrastrukturu i provozní odpovědnosti. Typické oblasti použití jsou státní správa, výroba, zdravotnictví, sklady a obchod, kde systém propojuje evidenci, workflow, reporting a integrace s okolními systémy. Rozsáhlé IS mívají vícevrstvou nebo servisně orientovanou architekturu, oddělují prezentační, aplikační a datovou vrstvu a řeší bezpečnost, auditovatelnost, škálování a dostupnost. Vývoj a zavádění takových systémů vyžaduje řízení rozsáhlých projektů, práci s požadavky, změnové řízení a plán migrace dat. Po nasazení je klíčové řízení provozu: monitoring, zálohování, správa incidentů, dostupnost, kapacitní plánování a průběžná údržba.",
-      "scope": [
-        {
-          "t": "Definice AIS",
-          "d": "AIS je informační systém určený pro konkrétní oblast použití organizace. Zahrnuje aplikace, data, procesy, uživatele, role a technologickou infrastrukturu. Jeho účelem je podporovat provozní činnosti i manažerské rozhodování."
-        },
-        {
-          "t": "Oblasti použití IS: státní správa, výroba, zdravotnictví, sklady a obchod",
-          "d": "Ve státní správě IS podporují agendy a evidenci, ve výrobě plánování a sledování zakázek, ve zdravotnictví práci se zdravotnickou dokumentací a ve skladech a obchodu zásoby, objednávky a prodej. Každá doména má vlastní procesy, regulace a integrační potřeby."
-        },
-        {
-          "t": "Architektury rozsáhlých informačních systémů",
-          "d": "Rozsáhlé IS se navrhují ve vrstvách nebo službách: prezentační rozhraní, aplikační logika, datová vrstva a integrační rozhraní. Důležitá je modularita, škálovatelnost, dostupnost, bezpečnost, audit a správa rozhraní na jiné systémy."
-        },
-        {
-          "t": "Metody vedení rozsáhlých projektů",
-          "d": "Vedení rozsáhlého projektu zahrnuje sběr požadavků, plánování rozsahu, řízení rizik, změnové řízení, koordinaci týmů a akceptační testování. Používají se prediktivní i agilní přístupy, často v kombinaci podle míry nejistoty a regulace."
-        },
-        {
-          "t": "Řízení provozu IS",
-          "d": "Řízení provozu řeší dostupnost systému, monitoring, incidenty, zálohy, obnovu po havárii, nasazování změn, kapacitní plánování a podporu uživatelů. Cílem je stabilní služba s předvídatelnou kvalitou a kontrolovanými změnami."
-        }
-      ]
-    },
-    {
-      "cat": "Programové, výpočetní a informační systémy",
-      "title": "Digitální systémy",
-      "codes": [
-        "PV170"
-      ],
-      "def": "Digitální systémy pracují s diskrétní reprezentací informace pomocí bitů, kódů a logických funkcí. Základem je teorie zobrazení dat a kódování informací včetně operací nad binárními reprezentacemi. Logické funkce lze minimalizovat algebraicky, graficky například Karnaughovými mapami nebo algoritmicky metodami typu Quine-McCluskey; cílem může být menší počet hradel, nižší zpoždění nebo lepší testovatelnost. Kombinační obvody nemají vnitřní stav a výstup závisí pouze na aktuálních vstupech; patří sem aritmetické obvody, komparátory, multiplexery, demultiplexery, kodéry a dekodéry. Sekvenční obvody mají paměť, jejich chování závisí na aktuálním vstupu i vnitřním stavu. Návrh sekvenčního obvodu zahrnuje kódování stavů, volbu klopných obvodů, konstrukci registrů, čítačů, řadičů a sekvencérů a posouzení vlivu zpoždění, hazardů a synchronizace.",
-      "scope": [
-        {
-          "t": "Teorie zobrazení dat a kódování informací včetně operací",
-          "d": "Data se v digitálních systémech reprezentují binárně pomocí pozičních soustav a kódů. Důležité jsou operace nad bity, doplňkový kód pro znaménková čísla, kódy znaků a detekční či opravné kódy. Reprezentace ovlivňuje rozsah hodnot, aritmetiku i chyby."
-        },
-        {
-          "t": "Algebraické, grafické a algoritmické minimalizační metody",
-          "d": "Minimalizace logických funkcí hledá jednodušší ekvivalentní výraz. Algebraické úpravy používají zákony Booleovy algebry, Karnaughovy mapy vizuálně seskupují jedničky a algoritmické metody systematicky hledají primární implikanty."
-        },
-        {
-          "t": "Optimalizace zpoždění, logických prvků a testovatelnosti",
-          "d": "Návrh obvodu může optimalizovat počet hradel, hloubku logiky, spotřebu, zpoždění nebo testovatelnost. Tyto cíle se často střetávají: minimální počet hradel nemusí dát nejkratší kritickou cestu ani nejsnáze testovatelný obvod."
-        },
-        {
-          "t": "Kombinační konstrukční prvky digitálních systémů",
-          "d": "Kombinační prvky nemají paměť. Aritmetické obvody provádějí sčítání a další operace, komparátory porovnávají hodnoty, multiplexery vybírají vstup podle adresy a kodéry či dekodéry převádějí mezi kódovanými reprezentacemi."
-        },
-        {
-          "t": "Sekvenční obvody a kódování vnitřních stavů",
-          "d": "Sekvenční obvod má stav uložený v klopných obvodech nebo registrech. Kódování stavů ovlivňuje složitost přechodové a výstupní logiky, počet potřebných klopných obvodů i možné hazardy."
-        },
-        {
-          "t": "Typy a vlastnosti klopných obvodů",
-          "d": "Klopné obvody uchovávají jeden bit. Základní typy jsou SR, D, JK a T; liší se vstupy, přechodovou funkcí a vhodností pro registry nebo čítače. Důležité jsou časové parametry setup, hold a zpoždění."
-        },
-        {
-          "t": "Základní sekvenční konstrukční prvky",
-          "d": "Registry uchovávají vícebitová data, čítače postupují posloupností stavů, komparátory porovnávají hodnoty a řadiče či sekvencéry generují řídicí signály v čase. Jsou základními stavebními bloky procesorů a řídicích jednotek."
         }
       ]
     },
@@ -931,40 +859,6 @@ window.STUDY_DATASETS.push({
         {
           "t": "Paralelní algoritmy s distribuovanou pamětí a MPI",
           "d": "V distribuované paměti má každý proces vlastní adresní prostor a data se předávají zprávami. MPI poskytuje standardní operace send/receive i kolektivní komunikaci jako broadcast, scatter, gather a reduce."
-        }
-      ]
-    },
-    {
-      "cat": "Programové, výpočetní a informační systémy",
-      "title": "Moderní značkovací jazyky",
-      "codes": [
-        "PB138"
-      ],
-      "def": "Moderní značkovací jazyky, zejména rodina XML, slouží ke strukturovanému zápisu dokumentů a dat v textové, strojově zpracovatelné podobě. XML definuje syntaxi elementů, atributů, stromovou strukturu dokumentu, jmenné prostory a pravidla dobře utvořeného dokumentu. Používá se pro dokumenty, konfigurační soubory, výměnu dat i doménové formáty. Programy pracují s XML často přes objektový model dokumentu (DOM), který reprezentuje dokument jako strom uzlů, nebo přes proudové zpracování u velkých souborů. Správnost struktury se popisuje schématy, zejména XML Schema, které určuje elementy, atributy, typy a omezení. XPath slouží k navigaci ve stromu XML, XQuery k dotazování nad XML daty a XSLT k transformacím XML dokumentů do jiných XML, HTML nebo textových výstupů. Důležité je rozumět rozdílu mezi syntaktickou správností, validitou vůči schématu a významem dat pro aplikaci.",
-      "scope": [
-        {
-          "t": "Základní standardy rodiny XML",
-          "d": "Rodina XML zahrnuje XML syntaxi, jmenné prostory, XML Schema, XPath, XQuery a XSLT. Tyto standardy společně řeší zápis strukturovaných dat, popis povolené struktury, adresaci částí dokumentu, dotazování a transformace."
-        },
-        {
-          "t": "Aplikace XML pro dokumenty a data",
-          "d": "XML lze použít pro dokumentově orientovaný obsah i pro datovou výměnu. U dokumentů je důležité pořadí a smíšený obsah, u dat pravidelná struktura a typy. Výhodou je čitelnost a standardní nástroje, nevýhodou větší ukecanost."
-        },
-        {
-          "t": "Objektový model dokumentu (DOM)",
-          "d": "DOM reprezentuje XML dokument jako strom uzlů: dokument, elementy, atributy, textové uzly a komentáře. Umožňuje náhodný přístup a úpravy stromu, ale u velkých dokumentů spotřebuje více paměti než proudové zpracování."
-        },
-        {
-          "t": "Jazyky schémat (XML Schema)",
-          "d": "XML Schema definuje povolené elementy, atributy, pořadí, výskyty a datové typy. Validace ověřuje, zda dokument odpovídá schématu. Schéma je kontrakt mezi producentem a konzumentem XML dat."
-        },
-        {
-          "t": "Navigace a dotazování v XML datech (XPath, XQuery)",
-          "d": "XPath adresuje uzly ve stromu pomocí cest, predikátů a funkcí. XQuery je bohatší dotazovací jazyk nad XML kolekcemi, umožňuje iterace, filtrování, řazení a konstrukci nových XML výsledků."
-        },
-        {
-          "t": "Transformace XML (XSLT)",
-          "d": "XSLT je deklarativní jazyk pro transformaci XML pomocí šablon. Šablony se aplikují na uzly vybrané XPath výrazy a generují výstup, například HTML stránku, jiný XML formát nebo text."
         }
       ]
     }
@@ -1280,7 +1174,7 @@ window.STUDY_DATASETS.push({
         "cv": "Vyber tři NP-úplné problémy a u každého popiš jeho vstup, otázku a snadno ověřitelný certifikát řešení."
       }
     },
-    "Strukturování a řízení běhu programu": {
+    "Podprogramy a objektově orientované programování": {
       "Podprogramy": {
         "ex": "Místo trojího opakování kódu pro výpočet obsahu obdélníku se napíše jediná funkce obsah(a,b) a třikrát se zavolá s různými argumenty.",
         "cv": "Rozděl delší kód počítající průměr a směrodatnou odchylku pole na dvě funkce a ukaž jejich volání."
@@ -1344,7 +1238,7 @@ window.STUDY_DATASETS.push({
         "cv": "Popiš postup, jak bys pomocí breakpointů a sledování proměnných našel příčinu chybného výsledku v cyklu."
       }
     },
-    "Architektury": {
+    "Nízkoúrovňové výpočetní architektury": {
       "Číselné soustavy a vztahy mezi nimi": {
         "ex": "Číslo 13 v desítkové soustavě je 1101 dvojkově a D šestnáctkově; převod do dvojkové soustavy se dělá opakovaným dělením dvěma.",
         "cv": "Převeď číslo 45 z desítkové soustavy do dvojkové a šestnáctkové a výsledek ověř zpětným převodem."
@@ -1540,7 +1434,7 @@ window.STUDY_DATASETS.push({
         "cv": "Pro čtyři aplikace (e-mail, videohovor, DNS dotaz, přenos souboru) vyber TCP, nebo UDP a rozhodnutí zdůvodni."
       }
     },
-    "Síťové aplikace a bezpečnost": {
+    "Síťové aplikace a jejich bezpečnost": {
       "Základní aplikační protokoly (pošta, přenos souborů, web, jmenná služba)": {
         "ex": "Při psaní www.muni.cz do prohlížeče nejprve DNS přeloží jméno na IP adresu a teprve pak HTTP stáhne stránku z toho serveru.",
         "cv": "Ke každému protokolu SMTP, IMAP, HTTP, FTP a DNS přiřaď jeho úlohu a uveď, na kterém portu typicky běží."
@@ -1588,7 +1482,7 @@ window.STUDY_DATASETS.push({
         "cv": "Vysvětli, k čemu slouží standardizovaná kritéria (například Common Criteria) a co vyjadřuje výsledná úroveň záruky."
       }
     },
-    "Informační bezpečnost": {
+    "Vývoj bezpečných aplikací": {
       "Řízení identity a přístupu": {
         "ex": "Zaměstnanec se přihlásí heslem a kódem z mobilu (vícefaktorová autentizace) a podle role účetní vidí jen účetní modul (autorizace, nejmenší oprávnění).",
         "cv": "Navrhni pro firemní systém role a jejich oprávnění a vysvětli, jak uplatníš princip nejmenších oprávnění."
@@ -1597,10 +1491,6 @@ window.STUDY_DATASETS.push({
         "ex": "E-shop má podle zásady minimalizace dat sbírat jen údaje nutné k dodání zboží; ke statistikám pak používá anonymizovaná data.",
         "cv": "Pro mobilní aplikaci navrhni, která data sbírat podle minimalizace dat, a urči, kde použít anonymizaci či pseudonymizaci."
       },
-      "Síťové útoky": {
-        "ex": "Při útoku man-in-the-middle se útočník vloží mezi klienta a server, odposlouchává a podvrhuje data; DDoS naopak zahltí server a způsobí jeho nedostupnost.",
-        "cv": "Ke třem útokům (odposlech, man-in-the-middle, DDoS) přiřaď, kterou vlastnost triády CIA ohrožují, a navrhni ke každému obranu."
-      },
       "Bezpečné programování a vývoj SW": {
         "ex": "SQL injection vznikne vložením vstupu přímo do dotazu; obranou je parametrizovaný dotaz, který vstup nikdy nepovažuje za součást příkazu.",
         "cv": "Najdi v zadaném kódu zranitelnost typu SQL injection nebo přetečení bufferu a oprav ji bezpečným postupem."
@@ -1608,58 +1498,6 @@ window.STUDY_DATASETS.push({
       "Použitelná bezpečnost": {
         "ex": "Příliš přísná politika hesel vede k tomu, že si je lidé píší na lísteček – nesrozumitelné opatření uživatelé obcházejí a bezpečnost klesá.",
         "cv": "Navrhni přihlašování, které je bezpečné i použitelné, a vysvětli, jak vyvažuješ ochranu a pohodlí uživatele."
-      }
-    },
-    "Aplikované informační systémy": {
-      "Definice AIS": {
-        "ex": "Nemocniční AIS eviduje pacienty, vyšetření, výsledky a ordinace léků. Kromě aplikace obsahuje databázi, role lékařů a sester, proces příjmu pacienta, pravidla přístupu a integrace na laboratorní systém.",
-        "cv": "Examinátor ti zadá univerzitní studijní systém. Urči jeho aktéry, data, procesy, integrační vazby a bezpečnostní požadavky."
-      },
-      "Oblasti použití IS: státní správa, výroba, zdravotnictví, sklady a obchod": {
-        "ex": "Skladový IS sleduje příjem zboží, umístění položek, rezervace pro objednávky a expedici. Ve výrobě by analogický systém navíc řešil kusovníky, výrobní příkazy a sledování rozpracovanosti.",
-        "cv": "Porovnej IS pro zdravotnictví a e-shop: uveď dva společné rysy a dvě doménová specifika."
-      },
-      "Architektury rozsáhlých informačních systémů": {
-        "ex": "Třívrstvá architektura oddělí webové UI, aplikační server s obchodní logikou a databázi. Díky tomu lze škálovat webové servery zvlášť a databázi chránit před přímým přístupem klientů.",
-        "cv": "Navrhni architekturu informačního systému pro síť skladů: UI, aplikační služby, databáze, integrace na účetnictví a dopravce, monitoring a bezpečnostní hranice."
-      },
-      "Metody vedení rozsáhlých projektů": {
-        "ex": "Při zavádění ERP se nejprve mapují procesy a požadavky, poté se plánují etapy, migrace dat, školení a akceptační testy. Změna požadavků musí projít řízením dopadu na cenu, čas a rizika.",
-        "cv": "Představ si výměnu ERP systému. Popiš fáze projektu, práci s požadavky, migraci dat, akceptační testování, školení a řízení změn."
-      },
-      "Řízení provozu IS": {
-        "ex": "Provoz AIS zahrnuje monitoring dostupnosti, logů a výkonu, pravidelné zálohy a postup obnovy. Incident typu výpadek databáze má mít jasný eskalační postup a měřený čas obnovy.",
-        "cv": "Navrhni základní provozní opatření pro kritický IS: monitoring, zálohování, incident management a nasazování změn."
-      }
-    },
-    "Digitální systémy": {
-      "Teorie zobrazení dat a kódování informací včetně operací": {
-        "ex": "Osmibitový doplňkový kód reprezentuje \\(-1\\) jako 11111111; přičtením 00000001 vznikne 00000000 po zahození přenosu. Stejná bitová posloupnost může mít různý význam podle interpretace.",
-        "cv": "Zapiš číslo \\(-7\\) v osmibitovém doplňkovém kódu a vysvětli, proč stejné bity mohou jako unsigned znamenat jiné číslo."
-      },
-      "Algebraické, grafické a algoritmické minimalizační metody": {
-        "ex": "Funkci AB + \\(A\\neg B\\) lze algebraicky upravit na \\(A(B+\\neg B)=A\\). Karnaughova mapa ukáže totéž seskupením dvou sousedních jedniček lišících se jen v proměnné B.",
-        "cv": "Minimalizuj \\(F(A,B,C)=\\Sigma m(1,3,5,7),\\) vysvětli výsledek pravdivostní tabulkou nebo Karnaughovou mapou a řekni, proč proměnné A a B vypadnou."
-      },
-      "Optimalizace zpoždění, logických prvků a testovatelnosti": {
-        "ex": "Dvouúrovňový součin-součet může mít malé zpoždění, ale více hradel. Naopak sdílení mezivýrazů šetří hradla, může však prodloužit kritickou cestu a zkomplikovat testování vnitřních uzlů.",
-        "cv": "Uveď příklad kompromisu mezi minimalizací počtu hradel a minimalizací zpoždění v logickém obvodu."
-      },
-      "Kombinační konstrukční prvky digitálních systémů": {
-        "ex": "Multiplexer 4:1 má čtyři datové vstupy, dva adresové vstupy a jeden výstup. Podle adresy vybere jeden vstup; lze jím realizovat libovolnou logickou funkci dvou proměnných uložením pravdivostní tabulky na datové vstupy.",
-        "cv": "Navrhni poloviční sčítačku a určete, které výstupy odpovídají XOR a AND vstupů."
-      },
-      "Sekvenční obvody a kódování vnitřních stavů": {
-        "ex": "Automat se čtyřmi stavy lze kódovat dvěma bity binárně nebo čtyřmi bity one-hot. One-hot spotřebuje více klopných obvodů, ale často zjednoduší přechodovou logiku.",
-        "cv": "Examinátor zadá automat s osmi stavy. Porovnej binární a one-hot kódování z hlediska počtu klopných obvodů, složitosti logiky a detekce neplatných stavů."
-      },
-      "Typy a vlastnosti klopných obvodů": {
-        "ex": "D klopný obvod při aktivní hraně hodin uloží hodnotu D na výstup Q. Pokud se D změní těsně před hranou a poruší setup time, výstup může být metastabilní.",
-        "cv": "Vysvětli rozdíl mezi D a T klopným obvodem a uveď typické použití T obvodu."
-      },
-      "Základní sekvenční konstrukční prvky": {
-        "ex": "Synchronní čítač modulo 4 používá dva klopné obvody a prochází stavy 00, 01, 10, 11. Řadič procesoru je složitější sekvenční obvod, který generuje posloupnost řídicích signálů pro instrukce.",
-        "cv": "Navrhni čítač modulo 3: vyjmenuj stavy, minimální počet klopných obvodů a přechody včetně návratu z neplatného stavu."
       }
     },
     "Paralelní systémy": {
@@ -1690,32 +1528,6 @@ window.STUDY_DATASETS.push({
       "Paralelní algoritmy s distribuovanou pamětí a MPI": {
         "ex": "V MPI může proces 0 rozeslat části pole pomocí Scatter, každý proces spočítá lokální součet a Reduce je sečte do globálního výsledku. Data se nesdílí pamětí, ale kopírují zprávami.",
         "cv": "Navrhni MPI postup pro skalární součin dvou vektorů rozdělených mezi procesy a vysvětli rozdíl proti sdílené paměti."
-      }
-    },
-    "Moderní značkovací jazyky": {
-      "Základní standardy rodiny XML": {
-        "ex": "XML určí syntaxi elementů, XPath vybere například všechny elementy book, XML Schema ověří, že book má povinné isbn, a XSLT převede seznam knih do HTML tabulky.",
-        "cv": "Přiřaď XML, XML Schema, XPath, XQuery a XSLT k jejich roli při validaci, výběru dat, dotazování a transformaci dokumentu."
-      },
-      "Aplikace XML pro dokumenty a data": {
-        "ex": "Formát faktury v XML je datově orientovaný: má pravidelné elementy částek, položek a identifikátorů. XHTML článek je dokumentově orientovaný: záleží na pořadí odstavců a smíšeném textu.",
-        "cv": "Rozhodni, zda je XML vhodné pro konfigurační soubor aplikace, a uveď dvě výhody a dvě nevýhody."
-      },
-      "Objektový model dokumentu (DOM)": {
-        "ex": "DOM pro <kniha><nazev>AI</nazev></kniha> vytvoří element kniha s potomkem nazev a textovým uzlem AI. Program může najít uzel nazev a změnit jeho text.",
-        "cv": "Popiš, jak by DOM reprezentoval XML dokument s kořenovým elementem objednavka a několika položkami."
-      },
-      "Jazyky schémat (XML Schema)": {
-        "ex": "Schéma může určit, že element vek je celé číslo nezáporné a element osoba musí obsahovat právě jedno jmeno. Dokument s textem abc ve vek pak není validní.",
-        "cv": "Navrhni schéma pro element student s povinným atributem id, elementem jmeno a volitelným elementem email. Vysvětli, co znamená validní dokument."
-      },
-      "Navigace a dotazování v XML datech (XPath, XQuery)": {
-        "ex": "XPath výraz /knihovna/kniha[@rok>2020]/nazev vybere názvy knih v elementech kniha s atributem rok větším než 2020.",
-        "cv": "Napiš XPath výraz pro e-maily studentů druhého ročníku v dokumentu skola/student[@rocnik=\"2\"]/email a vysvětli jednotlivé části výrazu."
-      },
-      "Transformace XML (XSLT)": {
-        "ex": "XSLT šablona match=\"kniha\" může pro každý element kniha vytvořit HTML řádek tabulky s názvem a autorem. Transformace odděluje data od prezentačního výstupu.",
-        "cv": "Popiš, jak by XSLT převedlo XML seznam knih na HTML tabulku a proč je výhodné oddělit data od prezentace."
       }
     }
   },
@@ -2030,7 +1842,7 @@ window.STUDY_DATASETS.push({
         "cv": "SAT: vstup je booleovská formule, otázka „existuje splňující ohodnocení?“, certifikátem je ohodnocení (ověří se dosazením). Barvení grafu: vstup graf a počet k, otázka „lze obarvit k barvami?“, certifikát je obarvení. Problém batohu: vstup předměty s váhami a hodnotami, certifikát je výběr předmětů."
       }
     },
-    "Strukturování a řízení běhu programu": {
+    "Podprogramy a objektově orientované programování": {
       "Podprogramy": {
         "ex": "Funkce obsah(a,b) odstraní duplicitu: výpočet a*b je na jednom místě a volající předává jen různé argumenty. Výhoda je údržba i čitelnost: změna pravidla výpočtu se provede jednou a všechny volání ji používají automaticky.",
         "cv": "Rozdělení může být prumer(pole), který sečte prvky a vydělí počtem, a smerodatnaOdchylka(pole), která nejprve zavolá prumer(pole), pak spočítá průměr čtverců odchylek a odmocninu. Volání: m=prumer(data); s=smerodatnaOdchylka(data). Každá funkce má jednu odpovědnost."
@@ -2094,7 +1906,7 @@ window.STUDY_DATASETS.push({
         "cv": "Nejprve bych vytvořil minimální vstup, kde chyba nastane. Breakpoint dám před cyklus, sleduji proměnné řídící index, mez a akumulátor. Krokováním porovnávám očekávaný a skutečný stav po každé iteraci. Jakmile se poprvé liší, ověřím podmínku cyklu, aktualizaci indexu a zápis do datové struktury."
       }
     },
-    "Architektury": {
+    "Nízkoúrovňové výpočetní architektury": {
       "Číselné soustavy a vztahy mezi nimi": {
         "ex": "13 děleno dvěma dává zbytky 1,0,1,1 čtené odzadu, tedy \\(1101_{2}\\). Šestnáctkově je 13 jedna cifra D. Zpětně \\(1101_{2} = 1\\cdot 8+1\\cdot 4+0\\cdot 2+1\\) = 13 a \\(D_{16}\\) = 13.",
         "cv": "45 dělením dvěma: zbytky 1,0,1,1,0,1 čtené odzadu dávají \\(101101_{2}\\). Do hexu seskupíme 0010 1101, tedy \\(2D_{16}\\). Kontrola: \\(2\\cdot 16+13=45\\) a \\(101101_{2}\\) = 32+8+4+1=45."
@@ -2290,7 +2102,7 @@ window.STUDY_DATASETS.push({
         "cv": "E-mail: TCP, protože SMTP/IMAP potřebují spolehlivý přenos. Videohovor: typicky UDP, protože zpožděný paket už nemá hodnotu. DNS dotaz: běžně UDP kvůli krátké výměně, TCP pro velké odpovědi nebo zónové přenosy. Přenos souboru: TCP, protože soubor musí dorazit celý a ve správném pořadí."
       }
     },
-    "Síťové aplikace a bezpečnost": {
+    "Síťové aplikace a jejich bezpečnost": {
       "Základní aplikační protokoly (pošta, přenos souborů, web, jmenná služba)": {
         "ex": "DNS překládá doménové jméno na IP adresu, protože HTTP pracuje až se serverem dostupným přes síťovou adresu. Po získání IP adresy prohlížeč naváže TCP/TLS spojení a odešle HTTP požadavek. Aplikační protokoly tedy často spolupracují.",
         "cv": "SMTP odesílá poštu, port 25 pro server-server, často 587 pro submission. IMAP zpřístupňuje schránku, port 143 nebo 993 s TLS. HTTP přenáší web, port 80, HTTPS 443. FTP přenáší soubory, řídicí port 21. DNS překládá jména, port 53 UDP/TCP."
@@ -2338,7 +2150,7 @@ window.STUDY_DATASETS.push({
         "cv": "Standardizovaná kritéria umožňují opakovatelně popsat, co se hodnotí a jaké důkazy musí výrobce dodat. Výsledná úroveň záruky vyjadřuje důvěru získanou analýzou, testováním a kontrolou vývoje. Je nutné ji číst spolu s bezpečnostním cílem a rozsahem hodnocení."
       }
     },
-    "Informační bezpečnost": {
+    "Vývoj bezpečných aplikací": {
       "Řízení identity a přístupu": {
         "ex": "Autentizace ověřuje identitu, autorizace rozhoduje o oprávnění. MFA kombinuje alespoň dva faktory, například heslo a zařízení. Role účetní pak dostane jen oprávnění potřebná k účetním úlohám; omezení práv snižuje dopad omylu i kompromitace účtu.",
         "cv": "Role: zaměstnanec čte vlastní výplatní pásky, účetní spravuje faktury, manažer schvaluje objednávky svého týmu, administrátor spravuje účty bez přístupu k obchodním datům. Princip nejmenších oprávnění znamená přidělit výchozí minimum, práva časově omezovat a pravidelně revidovat."
@@ -2347,10 +2159,6 @@ window.STUDY_DATASETS.push({
         "ex": "Minimalizace dat omezuje sběr na údaje nutné pro daný účel. E-shop potřebuje doručovací adresu pro objednávku, ale nepotřebuje datum narození, pokud neprodává věkově omezené zboží. Anonymizace odstraňuje vazbu na osobu, pseudonymizace ji nahrazuje odděleným identifikátorem.",
         "cv": "Mobilní aplikace má sbírat jen data nutná pro funkci: například e-mail pro účet a polohu jen při funkci, která ji vyžaduje. Analytiku ukládat agregovaně nebo anonymizovaně. Pseudonymizaci použít tam, kde je třeba spojit události jednoho uživatele bez přímého jména; klíč držet odděleně."
       },
-      "Síťové útoky": {
-        "ex": "Odposlech pasivně ohrožuje důvěrnost. Man-in-the-middle ohrožuje důvěrnost i integritu, protože útočník komunikaci čte a mění. DDoS cílí na dostupnost zahlcením zdrojů. Obrana musí odpovídat vlastnosti, kterou útok porušuje.",
-        "cv": "Odposlech: ohrožuje důvěrnost, obrana TLS/VPN a šifrování. Man-in-the-middle: ohrožuje důvěrnost, integritu i autentizaci, obrana ověřené certifikáty, HSTS, pinning tam, kde dává smysl. DDoS: ohrožuje dostupnost, obrana filtrace, rate limiting, anycast/CDN a kapacitní mitigace."
-      },
       "Bezpečné programování a vývoj SW": {
         "ex": "SQL injection vzniká, když se vstup spojí s SQL textem jako kód. Parametrizovaný dotaz oddělí strukturu dotazu od hodnot: SELECT ... WHERE name = ? s parametrem. Databáze pak vstup interpretuje jako data i tehdy, když obsahuje uvozovky nebo SQL klíčová slova.",
         "cv": "U SQL injection nahraď skládání řetězce parametrizovaným dotazem nebo prepared statementem a validuj vstup podle očekávaného typu. U buffer overflow nahraď neomezené kopírování kontrolou délky, bezpečnější funkcí a velikostí cílového bufferu. Oprava musí odstranit příčinu, ne jen filtrovat jeden známý útok."
@@ -2358,58 +2166,6 @@ window.STUDY_DATASETS.push({
       "Použitelná bezpečnost": {
         "ex": "Opatření, které uživatelé nedokážou rozumně dodržet, vytváří obcházení. Příliš časté změny hesel a složitá pravidla vedou k zapisování hesel nebo opakování vzorů. Použitelná bezpečnost hledá mechanismus, který je bezpečný v reálném lidském chování.",
         "cv": "Vhodné přihlášení: správce hesel podporovaný dlouhými hesly nebo passkeys, MFA pomocí push/FIDO2 místo opisování složitých kódů, jasné chybové hlášky a bezpečná obnova účtu. Vyvážení spočívá v silné ochraně proti phishingu a hádání, ale s minimem zbytečných kroků pro běžný legitimní přístup."
-      }
-    },
-    "Aplikované informační systémy": {
-      "Definice AIS": {
-        "ex": "AIS je sociotechnický celek: software bez procesů, datové odpovědnosti a uživatelských rolí nestačí. U nemocnice jsou klíčové entity pacient, návštěva, vyšetření a medikace; procesy zahrnují příjem, vyšetření a propuštění. Přístupová práva chrání citlivá data.",
-        "cv": "Aktéři jsou studenti, vyučující, studijní oddělení a administrátoři. Data zahrnují identity, předměty, zápisy, hodnocení a platby. Procesy jsou zápis předmětů, evidence zkoušek, komunikace a reporting. Integrace míří na identity, e-mail, ekonomický systém a e-learning. Bezpečnost řeší role, audit známek, dostupnost v zápisových špičkách a ochranu osobních údajů."
-      },
-      "Oblasti použití IS: státní správa, výroba, zdravotnictví, sklady a obchod": {
-        "ex": "Skladový IS je transakční systém s důrazem na přesnost zásob a rychlou expedici. Výrobní IS navíc plánuje návaznosti operací, materiálové potřeby a kapacity strojů. Oba vyžadují aktuální data a integraci s ekonomickým systémem.",
-        "cv": "Společné rysy: práce s osobními nebo zákaznickými daty a potřeba auditovat změny. Zdravotnictví řeší zdravotnickou dokumentaci, souhlasy a vysokou citlivost údajů. E-shop řeší katalog, košík, platby, skladovou dostupnost a logistiku."
-      },
-      "Architektury rozsáhlých informačních systémů": {
-        "ex": "Oddělení vrstev omezuje závislosti: UI neobsahuje SQL dotazy a databáze není vystavena internetu. Integrace se řeší API nebo message brokerem. U rozsáhlého IS je důležitá i observabilita, autentizace a autorizační služba.",
-        "cv": "Vhodná je vrstvená nebo servisní architektura: webové UI a mobilní terminály, API nebo aplikační služby pro skladové operace, databáze zásob, fronty pro události a integrace na účetnictví i dopravce. Bezpečnostní hranice oddělí klienty, služby, databázi a administraci. Monitoring sleduje dostupnost, chyby integrací a výkon v expedičních špičkách."
-      },
-      "Metody vedení rozsáhlých projektů": {
-        "ex": "ERP projekt má vysoké organizační riziko, protože mění procesy. Proto nestačí programovat: je nutné řídit stakeholdery, migraci, testování i školení. Akceptace se váže na scénáře reálné práce, ne pouze na technickou instalaci.",
-        "cv": "Projekt začne cíli a mapováním procesů, pokračuje požadavky a výběrem řešení, návrhem integrací, konfigurací nebo vývojem, migrací dat, testy, školením a pilotem. Akceptace ověřuje procesy na reálných scénářích. Změny požadavků mají projít posouzením dopadu na cenu, čas a riziko."
-      },
-      "Řízení provozu IS": {
-        "ex": "Monitoring musí hlídat nejen server, ale i aplikační metriky, například počet chyb přihlášení nebo frontu nezpracovaných zpráv. Zálohy musí být pravidelně testované obnovou. Jinak existuje jen domněnka, že data lze obnovit.",
-        "cv": "Opatření: dostupnostní monitoring a alerty, centrální logy, denní zálohy s testem obnovy, definované priority incidentů, plán obnovy po havárii, staging prostředí a řízené nasazování změn s možností návratu."
-      }
-    },
-    "Digitální systémy": {
-      "Teorie zobrazení dat a kódování informací včetně operací": {
-        "ex": "Doplňkový kód sjednocuje sčítání kladných a záporných čísel: stejná sčítačka zpracuje oba případy. Význam bitů ale závisí na typu: 11111111 je \\(-1\\) jako signed 8bit, ale 255 jako unsigned.",
-        "cv": "+7 je 00000111, inverze 11111000 a plus 1 dává 11111001. Jako signed je to \\(-7,\\) jako unsigned je to 249. Interpretace není uložena v bitech, ale v typu a operaci, která je používá."
-      },
-      "Algebraické, grafické a algoritmické minimalizační metody": {
-        "ex": "Výraz AB + \\(A\\neg B\\) obsahuje společný faktor A. Protože \\(B+\\neg B=1,\\) zůstane A. Obvod se zjednoduší z kombinace dvou AND a jednoho OR na pouhý signál A.",
-        "cv": "Mintermy 1, 3, 5, 7 odpovídají všem kombinacím, kde C=1 bez ohledu na A a B. Karnaughova mapa dovolí seskupit všechny čtyři jedničky, takže F=C. Proměnné A a B se ve skupině mění, a proto nejsou ve výsledném implicantu."
-      },
-      "Optimalizace zpoždění, logických prvků a testovatelnosti": {
-        "ex": "Kritická cesta určuje maximální frekvenci synchronního obvodu. Přidání paralelní logiky nebo pipeline registru může zrychlit časování, i když zvýší počet prvků. Testovatelný návrh může přidat scan chain, který zvyšuje režii, ale usnadňuje odhalení vad.",
-        "cv": "Například sdílení jednoho mezivýrazu X pro více výstupů sníží počet hradel, ale všechny výstupy čekají na výpočet X. Duplikace logiky zvýší počet hradel, ale zkrátí nebo rozdělí kritickou cestu a může zvýšit rychlost."
-      },
-      "Kombinační konstrukční prvky digitálních systémů": {
-        "ex": "Multiplexer lze chápat jako hardwarový výběr podle adresy. Když datové vstupy nastavíme na hodnoty pravdivostní tabulky, adresové vstupy reprezentují proměnné a výstup realizuje danou funkci.",
-        "cv": "Poloviční sčítačka: pro A,B je součet S=A XOR B a přenos C=A AND B. Tabulka: \\(00\\to 00, 01\\to 10, 10\\to 10, 11\\to 01,\\) pokud zapisujeme S,C. Stačí hradlo XOR a hradlo AND."
-      },
-      "Sekvenční obvody a kódování vnitřních stavů": {
-        "ex": "Kódování stavů není jen formální detail. Binární kód šetří registry, ale přechodová logika může být složitější. One-hot používá jeden klopný obvod na stav, ale přechody se často vyjadřují jednodušeji.",
-        "cv": "Binární kódování osmi stavů potřebuje 3 klopné obvody, one-hot 8. Binární šetří registry, ale přechodová logika může být složitější. One-hot často zjednoduší logiku a dekódování stavů, ale spotřebuje více klopných obvodů. U obou je třeba řešit neplatné nebo porušené stavy a reset."
-      },
-      "Typy a vlastnosti klopných obvodů": {
-        "ex": "Setup a hold time jsou minimální intervaly stability vstupu kolem hrany hodin. Jejich porušení může vést k metastabilitě, kdy se výstup po určitou dobu nechová jako platná 0 nebo 1.",
-        "cv": "D obvod ukládá přímo vstup D při hodinové hraně a hodí se pro registry. T obvod při T=1 překlápí stav, při T=0 ho drží; proto se používá pro čítače a děličky frekvence."
-      },
-      "Základní sekvenční konstrukční prvky": {
-        "ex": "Čítač je konečný automat se zvláštní posloupností stavů. Řadič je obecnější automat, jehož výstupy ovládají datovou cestu, například povolení zápisu registru nebo výběr vstupu multiplexoru.",
-        "cv": "Modulo 3 potřebuje alespoň 2 klopné obvody, protože dva bity kódují čtyři stavy. Použitelné stavy jsou 00, 01, 10 a po 10 následuje 00. Stav 11 je neplatný a návrh by ho měl při další hraně převést bezpečně na 00, aby se automat po chybě zotavil."
       }
     },
     "Paralelní systémy": {
@@ -2440,32 +2196,6 @@ window.STUDY_DATASETS.push({
       "Paralelní algoritmy s distribuovanou pamětí a MPI": {
         "ex": "MPI explicitně zviditelňuje cenu komunikace. Algoritmus, který ve sdílené paměti jen čte pole, musí v MPI data nejprve rozdělit a výsledky explicitně sesbírat. Proto je důležité minimalizovat počet a objem zpráv.",
         "cv": "Proces 0 nebo kolektivní operace rozdělí části vektorů mezi procesy, každý proces spočítá lokální součet součinů a MPI_Reduce sečte lokální výsledky do globální hodnoty. V distribuované paměti procesy nesdílí proměnné přímo; data se předávají zprávami, například Scatter, Broadcast a Reduce."
-      }
-    },
-    "Moderní značkovací jazyky": {
-      "Základní standardy rodiny XML": {
-        "ex": "Jednotlivé standardy mají oddělené odpovědnosti: XML je syntaxe stromu, XML Schema typový kontrakt, XPath adresace uzlů, XQuery dotazování a XSLT transformace. Díky tomu lze nástroje kombinovat.",
-        "cv": "XML definuje syntaxi dokumentu, XML Schema popisuje povolenou strukturu a datové typy, XPath vybírá uzly, XQuery dotazuje kolekce XML dat a XSLT transformuje XML do jiného XML, HTML nebo textu. U odpovědi je dobré ukázat tok: dokument, validace, výběr, dotaz, transformace."
-      },
-      "Aplikace XML pro dokumenty a data": {
-        "ex": "XML je vhodné tam, kde je důležitá interoperabilita, hierarchie a validace. Pro velmi objemná nebo výkonově citlivá data může být nevhodné kvůli velikosti a nákladům parsování.",
-        "cv": "Pro konfiguraci je XML vhodné díky čitelnosti, hierarchii a validaci schématem. Nevýhody: je verbose a ruční editace může být náchylná k chybám ve značkách nebo jmenných prostorech."
-      },
-      "Objektový model dokumentu (DOM)": {
-        "ex": "DOM drží celý strom v paměti, proto je pohodlný pro editaci a náhodný přístup. U obrovských dokumentů je lepší SAX/StAX proudový parser, protože nemusí načíst vše najednou.",
-        "cv": "Kořen objednavka je kořenový element, má potomky položka, každý element položka má atributy nebo podřízené elementy jako nazev, mnozstvi a cena. Text uvnitř elementů je samostatný textový uzel."
-      },
-      "Jazyky schémat (XML Schema)": {
-        "ex": "Validita je silnější než dobře utvořenost. Dokument může mít správně uzavřené značky, ale být nevalidní, pokud chybí povinný element nebo má hodnota špatný typ.",
-        "cv": "Schéma by určilo element student jako komplexní typ, povinný atribut id, povinný element jmeno typu string a volitelný email s minOccurs=0. Validní dokument je nejen dobře utvořený XML, ale navíc splňuje pravidla schématu: pořadí, povinné části, typy hodnot a omezení."
-      },
-      "Navigace a dotazování v XML datech (XPath, XQuery)": {
-        "ex": "XPath je výrazový jazyk pro výběr uzlů; predikát v hranatých závorkách filtruje podle atributu, pozice nebo podmínky. XQuery nad tím staví celé dotazy včetně konstrukce výsledků.",
-        "cv": "Výraz může být /skola/student[@rocnik=\"2\"]/email. Lomítka vybírají cestu od kořene, student vybere elementy student, predikát [@rocnik=\"2\"] filtruje podle atributu a /email vrátí jejich e-mailové elementy. Relativní varianta by mohla začínat //student, pokud nezáleží na přesné poloze."
-      },
-      "Transformace XML (XSLT)": {
-        "ex": "XSLT používá šablony řízené strukturou vstupu, ne ruční průchod jako běžný imperativní program. Pro každý nalezený uzel se použije nejvhodnější šablona a vytvoří se výstupní strom.",
-        "cv": "XSLT definuje šablony pro vybrané elementy, například kořen knihovna a jednotlivé kniha. Pro každou knihu vytvoří řádek tabulky a hodnoty elementů nazev a autor vloží do buněk. Výhoda je, že stejná XML data lze transformovat do HTML, textu nebo jiného XML bez změny zdrojových dat."
       }
     }
   }
